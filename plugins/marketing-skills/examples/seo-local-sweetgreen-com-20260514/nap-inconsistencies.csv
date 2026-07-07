@@ -1,0 +1,7 @@
+source,name,address,phone,page_or_schema_path,canonical_value,divergence_note
+"page H1","Healthy Salads, Bowls, Wraps & Protein Plates",,,,/locations/union-square,"Sweetgreen Union Square","H1 is brand-tagline instead of store name; title-tag correctly says 'Sweetgreen Union Square'"
+"page H1","Sweetgreen Montrose",,,,/locations/montrose,"Sweetgreen Montrose","Store-name H1 — correct pattern"
+"page H1","Sweetgreen – Cherry Creek",,,,/locations/cherry-creek,"Sweetgreen Cherry Creek","H1 uses en-dash separator; minor styling drift vs Montrose"
+"schema LocalBusiness presence","absent",,,,/locations/union-square,"present (per Montrose template)","Schema block missing on this page; same store type and template variant should include Restaurant + LocalBusiness + FoodEstablishment"
+"schema aggregateRating presence","absent on all sampled",,,,/locations/{any},"present","Sweetgreen has thousands of reviews per location externally; missing on-page schema = leaving rich snippet eligibility on the table"
+"URL existence","404",,,,/locations/dupont-circle,"/locations/dupont-circle (active)","URL returns 404 despite Sweetgreen having a Dupont Circle DC location — sitemap vs real-store diff overdue"

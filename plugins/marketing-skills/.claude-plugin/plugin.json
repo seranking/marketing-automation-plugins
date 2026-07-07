@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "marketing-skills",
+  "displayName": "Marketing Skills",
+  "version": "1.0.0",
+  "description": "Claude Marketing Skills by SE Ranking and Planable. Run SEO, AI visibility, and social workflows individually or as one connected ecosystem: keyword gap analysis, content briefs, AI search share of voice, PPC analysis, local SEO, SEO roadmaps, social post batches, approval roundups, calendar audits, cross-client metrics, SEO-to-social campaigns, onboarding proposals, and unified SEO + AI + social reports.",
+  "author": {
+    "name": "SE Ranking & Planable",
+    "email": "api@seranking.com",
+    "url": "https://seranking.com"
+  },
+  "homepage": "https://seranking.com/claude-marketing-skills.html",
+  "repository": "https://github.com/seranking/claude-plugins",
+  "license": "MIT",
+  "keywords": [
+    "marketing",
+    "seo",
+    "smm",
+    "social-media",
+    "ai-search",
+    "mcp",
+    "se-ranking",
+    "planable",
+    "claude",
+    "claude-code",
+    "claude-skills",
+    "agent-skills",
+    "anthropic",
+    "content-brief",
+    "keyword-research",
+    "share-of-voice",
+    "ppc",
+    "local-seo",
+    "reporting",
+    "agency"
+  ]
+}
