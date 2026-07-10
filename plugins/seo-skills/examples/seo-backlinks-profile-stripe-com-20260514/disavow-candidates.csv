@@ -1,0 +1,11 @@
+domain,authority,backlinks_count,sitewide_links,top_anchor,anchor_class,risk_score,triggers,sample_url
+# THIS FILE IS A STRUCTURAL EXAMPLE. Live disavow candidates require SE Ranking auth.
+# Columns are the canonical seo-backlinks-profile output shape.
+# Real production runs populate one row per flagged referring domain.
+# Each row has 2+ triggers; risk_score weights the trigger count by trigger severity.
+# Example structure (no real flagged domains shown — would be Stripe-specific):
+#
+# example-low-da-blog.xyz,3,124,8,"online payments",exact_match_commercial,87,"DA<10; sitewide>5; exact-match-anchor; .xyz TLD",https://example-low-da-blog.xyz/footer.html
+# stale-fintech-tutorial.click,7,42,12,"stripe payments",branded,71,"DA<10; sitewide>5; .click TLD",https://stale-fintech-tutorial.click/tutorial/setup-stripe
+#
+# Production output adds context: 30-day referral-traffic, last-crawled date, removal-request status.

@@ -96,6 +96,50 @@
         "share-of-voice",
         "reporting"
       ]
+    },
+    {
+      "name": "seo-skills",
+      "source": "./plugins/seo-skills",
+      "description": "Claude SEO Skills for the SE Ranking MCP server. Keyword research, content briefing, page intelligence, technical and content audits, structured data, drift monitoring, SXO diagnostics, competitive analysis, paid search, AI-search optimization, sitemap analysis, subdomain mapping, content opportunity mining, strategic roadmap planning, local SEO (GBP / NAP / local pack), international SEO (hreflang validation), Google APIs (GSC, PSI, CrUX, Indexing, GA4, YouTube, NLP), and SE Ranking API integration recipes (Data API + Project API).",
+      "version": "2.10.4",
+      "author": {
+        "name": "SE Ranking",
+        "email": "api@seranking.com"
+      },
+      "homepage": "https://github.com/seranking/seo-skills",
+      "repository": "https://github.com/seranking/claude-plugins",
+      "license": "MIT",
+      "category": "seo",
+      "tags": [
+        "seo",
+        "mcp",
+        "se-ranking",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "agent-skills",
+        "content-brief",
+        "ai-search",
+        "keyword-research",
+        "backlinks",
+        "site-audit",
+        "share-of-voice",
+        "aeo",
+        "geo",
+        "local-seo",
+        "hreflang"
+      ],
+      "keywords": [
+        "seo",
+        "mcp",
+        "se-ranking",
+        "claude-skills",
+        "content-brief",
+        "ai-search",
+        "keyword-research",
+        "backlinks",
+        "site-audit"
+      ]
     }
   ]
 }

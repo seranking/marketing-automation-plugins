@@ -1,0 +1,113 @@
+rank,referring_domain,domain_trust,links_to_count,links_to_competitors,sample_anchor,link_type,outreach_angle,score
+1,geekflare.com,78,4,"jira;asana;monday;clickup","best project management tools",resource_list,"2025 PM roundup omits Linear — pitch inclusion with engineering angle",94
+2,hackernoon.com,76,4,"jira;asana;monday;clickup","Jira alternative",editorial,"Author-pitch a Linear deep-dive",92
+3,indiehackers.com,74,4,"jira;asana;monday;clickup","tools we use",editorial,"Sponsored Stories + community engagement",90
+4,dev.to,81,4,"jira;asana;monday;clickup","issue tracker for engineers",editorial,"Dev-led 'Why we moved from Jira' post pattern",89
+5,producthunt.com,82,4,"jira;asana;monday;clickup","Linear",listing,"Re-launch Linear sub-product for fresh PH momentum",88
+6,thedigitalprojectmanager.com,70,4,"jira;asana;monday;clickup","best project management software",resource_list,"Stale 2024 roundup; refresh pitch",86
+7,technologyadvice.com,72,4,"jira;asana;monday;clickup","best PM tool 2026",listicle,"Editor-driven roundup; case-study pitch",85
+8,softwareadvice.com,76,3,"jira;asana;monday","(review listing)",directory,"Apply via reviewer program",84
+9,g2.com,91,4,"jira;asana;monday;clickup","Linear",directory,"Climb 'alternatives to Jira' category placement",83
+10,capterra.com,88,4,"jira;asana;monday;clickup","alternatives to Jira",directory,"Push for category placement",82
+11,nira.com,64,3,"jira;asana;clickup","Asana review",editorial,"Comparison-page replacement strategy",80
+12,nichepursuits.com,58,2,"asana;clickup","Asana alternatives",resource_list,"Engineering-focused alternative pitch",79
+13,flatworldsolutions.com,52,3,"jira;monday;clickup","Jira alternative for startups",editorial,"Case-study pitch",78
+14,freecodecamp.org,80,2,"jira;clickup","issue tracker",editorial,"Dev tutorial slot",78
+15,startuptalky.com,60,3,"asana;monday;clickup","best startup tools",resource_list,"Refresh angle",76
+16,smashingmagazine.com,84,2,"jira;asana","design ops",editorial,"Linear design-team angle",76
+17,a16z.com,70,2,"asana;clickup","AI-native tools",editorial,"Long shot but high-leverage",74
+18,yourstory.com,64,3,"asana;monday;clickup","PM tools for SaaS",editorial,"India-market angle",72
+19,sifted.eu,66,2,"monday;clickup","European startup stack",editorial,"EU-startup angle",71
+20,uxdesign.cc,68,2,"asana;monday","design tools",editorial,"Linear Insights → design-ops pitch",70
+21,"medium.com (Better Programming)",76,2,"jira;asana","Jira sucks",editorial,"Author-driven",68
+22,"reddit.com r/ProductManagement",91,3,"asana;monday;clickup","(org mention)",forum_ugc,"Engage, don't pitch",66
+23,producthabits.com,60,2,"asana;monday","product tools",editorial,"Newsletter sponsorship",65
+24,bytebytego.com,70,2,"jira;monday","system design tools",editorial,"Newsletter sponsor / author pitch",65
+25,makeuseof.com,78,2,"asana;clickup","best PM apps",editorial,"Pitch inclusion",64
+26,cloudtalk.io,58,3,"asana;monday;clickup","CRM and PM",editorial,"Pitch inclusion",62
+27,proofhub.com,56,3,"asana;monday;clickup","PM tools",vendor_blog,"Skip — competitor blog",-1
+28,clickup.com,0,1,"clickup","Jira alternatives",vendor_blog,"Skip — direct competitor",-1
+29,toolradar.com,52,2,"asana;clickup","CRM comparison",resource_list,"Refresh pitch",60
+30,projectmanager.com,68,2,"jira;monday","PM software",editorial,"Roundup pitch",60
+31,wrike.com,0,1,"asana","competitor",vendor_blog,"Skip — direct competitor",-1
+32,smartsheet.com,0,1,"monday","competitor",vendor_blog,"Skip — direct competitor",-1
+33,zenkit.com,52,2,"asana;monday","PM tools",vendor_blog,"Skip — competitor blog",-1
+34,quickbase.com,62,2,"monday;clickup","no-code platform",editorial,"Adjacent positioning",55
+35,saasworthy.com,54,3,"asana;monday;clickup","best PM",directory,"Apply via vendor program",55
+36,project-management.com,56,3,"jira;asana;monday","PM news",editorial,"Editorial pitch",55
+37,smallbiztrends.com,64,2,"monday;clickup","small business tools",editorial,"Small business angle (not Linear's core, lower score)",50
+38,growthbarseo.com,48,2,"asana;monday","productivity",editorial,"Below DT 40 normally but borderline",48
+39,nimbleway.com,58,2,"asana;clickup","crawlers + tools",editorial,"Off-topic — skip",30
+40,thrivemyway.com,42,2,"asana;monday","best apps",editorial,"Marginal DT — defer",42
+41,kissflow.com,68,2,"monday;clickup","work platform",vendor_blog,"Skip — competitor",-1
+42,jotform.com,84,2,"asana;monday","integrations",vendor_blog,"Strong DT but vendor",55
+43,airtable.com,86,2,"asana;monday","integrations",vendor_blog,"Adjacent — partnership angle, not link",-1
+44,wpbeginner.com,82,2,"monday;clickup","plugins + tools",editorial,"WP-niche, off-topic for Linear",30
+45,investopedia.com,93,2,"asana;monday","financial software",editorial,"Off-topic for Linear (no finance use case)",30
+46,businessnewsdaily.com,78,3,"jira;asana;monday","PM software",editorial,"Buyer-guide pitch",62
+47,getapp.com,84,4,"jira;asana;monday;clickup","alternatives",directory,"Apply via vendor program",75
+48,enterprisechain.com,52,2,"asana;clickup","enterprise tools",editorial,"Enterprise pitch — emerging but lower priority",50
+49,saashub.com,52,3,"asana;monday;clickup","comparisons",directory,"Apply via vendor program",55
+50,slant.co,58,3,"asana;monday;clickup","tool comparisons",directory,"Apply via vendor program",55
+51,trustradius.com,78,4,"jira;asana;monday;clickup","Linear review",directory,"Already listed — push category placement",78
+52,fitsmallbusiness.com,72,3,"asana;monday;clickup","best free PM",editorial,"Free-tier listicle pitch",68
+53,pcworld.com,82,3,"jira;asana;monday","best apps",editorial,"Buyer-guide pitch",70
+54,lifewire.com,82,2,"asana;monday","best apps",editorial,"Buyer-guide pitch",68
+55,wired.com,92,2,"jira;asana","AI tools",editorial,"Linear already in Wired — push for additional mentions",-1
+56,producttribe.com,52,2,"asana;clickup","PM resources",editorial,"Refresh pitch",55
+57,plaky.com,46,3,"asana;monday;clickup","PM tools",vendor_blog,"Skip — competitor",-1
+58,podia.com,56,2,"asana;clickup","creator tools",vendor_blog,"Adjacent niche, low priority",40
+59,sproutsocial.com,82,2,"asana;monday","social tools",editorial,"Off-topic for Linear",30
+60,buffer.com,84,2,"asana;monday","social tools",vendor_blog,"Off-topic",30
+61,help-scout.com,78,2,"asana;monday","support tools",vendor_blog,"Adjacent — partnership angle",50
+62,intercom.com,86,2,"asana;monday","customer messaging",vendor_blog,"Adjacent — partnership angle",55
+63,unbounce.com,84,2,"asana;monday","landing pages",vendor_blog,"Adjacent",40
+64,leadpages.com,76,2,"asana;monday","marketing",vendor_blog,"Off-topic",30
+65,convertkit.com,80,2,"asana;monday","creators",vendor_blog,"Off-topic",30
+66,sprinklr.com,78,2,"asana;monday","enterprise",vendor_blog,"Adjacent enterprise",45
+67,zendesk.com,90,2,"asana;monday","support",vendor_blog,"Adjacent — partnership angle",55
+68,salesforce.com,94,2,"asana;monday","enterprise software",vendor_blog,"Adjacent enterprise",50
+69,workfront.com,68,2,"asana;monday","enterprise PM",vendor_blog,"Skip — direct competitor",-1
+70,liquidplanner.com,62,2,"asana;monday","PM software",vendor_blog,"Skip — competitor",-1
+71,easyprojects.net,60,2,"asana;monday","PM software",vendor_blog,"Skip — competitor",-1
+72,fellow.app,62,2,"asana;monday","meeting tools",vendor_blog,"Adjacent partnership",55
+73,coda.io,72,2,"asana;monday","docs + collab",vendor_blog,"Adjacent — partnership angle",55
+74,notion.so,86,2,"asana;monday","docs + wiki",vendor_blog,"Adjacent — partnership angle",60
+75,obsidian.md,76,2,"asana;monday","knowledge",vendor_blog,"Adjacent niche",45
+76,roamresearch.com,68,2,"asana;monday","knowledge graphs",vendor_blog,"Adjacent niche",45
+77,figma.com,90,2,"asana;monday","design",vendor_blog,"Adjacent — design-team angle",60
+78,framer.com,82,2,"asana;monday","design",vendor_blog,"Adjacent — design-team angle",55
+79,sketchapp.com,72,2,"asana;monday","design",vendor_blog,"Adjacent — design-team angle",50
+80,miro.com,86,2,"asana;monday;clickup","whiteboard",vendor_blog,"Adjacent — partnership",60
+81,lucidchart.com,84,2,"asana;monday","diagramming",vendor_blog,"Adjacent — partnership",55
+82,mural.co,76,2,"asana;monday","whiteboard",vendor_blog,"Adjacent",50
+83,canva.com,92,2,"asana;monday","design",vendor_blog,"Adjacent — partnership",55
+84,calendly.com,88,2,"asana;monday","scheduling",vendor_blog,"Adjacent — partnership",55
+85,zoom.us,92,2,"asana;monday","video",vendor_blog,"Adjacent — partnership",55
+86,slack.com,94,2,"asana;monday","chat",vendor_blog,"Adjacent — direct integration, partnership angle",65
+87,microsoft.com,100,2,"asana;monday","Teams",vendor_blog,"Adjacent — partnership angle",60
+88,google.com,100,2,"asana;monday","Workspace",vendor_blog,"Adjacent — partnership angle",60
+89,dropbox.com,93,2,"asana;monday","storage",vendor_blog,"Adjacent — partnership angle",55
+90,box.com,89,2,"asana;monday","storage",vendor_blog,"Adjacent",50
+91,evernote.com,86,2,"asana;monday","notes",vendor_blog,"Adjacent",45
+92,todoist.com,80,2,"asana;monday","todos",vendor_blog,"Adjacent — partnership angle",50
+93,trello.com,90,2,"asana;monday","kanban",vendor_blog,"Skip — Atlassian-owned competitor",-1
+94,toggl.com,76,2,"asana;monday","time tracking",vendor_blog,"Adjacent — partnership angle",50
+95,harvest.com,68,2,"asana;monday","time tracking",vendor_blog,"Adjacent",45
+96,everhour.com,58,2,"asana;monday","time tracking",vendor_blog,"Adjacent",40
+97,clockify.me,68,2,"asana;monday","time tracking",vendor_blog,"Adjacent",45
+98,timely.com,62,2,"asana;monday","time tracking",vendor_blog,"Adjacent",40
+99,hubstaff.com,76,2,"asana;monday","time tracking",vendor_blog,"Adjacent",45
+100,timecamp.com,62,2,"asana;monday","time tracking",vendor_blog,"Adjacent",40
+101,quip.com,72,2,"asana;monday","docs",vendor_blog,"Adjacent",45
+102,confluence.atlassian.com,0,1,"jira","docs",vendor_blog,"Skip — Atlassian-owned",-1
+103,linkedin.com,99,2,"asana;monday","articles",editorial,"Author-led LinkedIn articles — long-tail",55
+104,quora.com,94,2,"asana;monday","Q&A",ugc,"Engage; don't pitch",55
+105,stackexchange.com,93,2,"jira;asana","Q&A",ugc,"Engage; don't pitch",55
+106,inc.com,90,2,"asana;monday","best software",editorial,"Buyer guide pitch",62
+107,entrepreneur.com,88,2,"asana;monday","best apps",editorial,"Buyer guide pitch",62
+108,fastcompany.com,87,2,"asana;monday","best software",editorial,"Linear already covered — additional roundup pitch",55
+109,vox.com,91,2,"asana;monday","best apps",editorial,"Long shot",50
+110,nytimes.com (Wirecutter),91,2,"asana;monday","best PM",editorial,"Wirecutter pitch — high bar but high yield",65
+111,buzzfeed.com,80,2,"asana;monday","best apps",editorial,"Low priority",40
+112,protocol.com,76,2,"asana;monday","enterprise software",editorial,"Defunct outlet — verify",30

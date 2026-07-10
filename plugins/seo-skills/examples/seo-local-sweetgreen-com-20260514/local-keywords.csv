@@ -1,0 +1,4 @@
+keyword,country,location,local_pack_present,target_in_pack,target_pack_position,target_organic_position,top_pack_competitor_1,top_pack_competitor_2,top_pack_competitor_3,aio_present
+"salad near me",us,"New York, NY",yes,no,,not_in_top_10,"just-salad","chopt","sweetgreen-not-in-top-3",no
+"salad near me",us,"Denver, CO (Cherry Creek)",yes,no,,not_in_top_10,"snooze","mad-greens","modmarket",no
+"best salad new york",us,"New York, NY",no,,,not_in_top_10,,,,no

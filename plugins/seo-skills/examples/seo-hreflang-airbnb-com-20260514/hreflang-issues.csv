@@ -1,0 +1,10 @@
+url,issue_code,severity,fix,source
+https://www.airbnb.com/,hreflang_missing_x_default,High,Add hreflang=x-default pointing to https://www.airbnb.com/ in head template,html
+https://www.airbnb.co.uk/,hreflang_missing_x_default,High,Add hreflang=x-default pointing to https://www.airbnb.com/ in head template,html
+https://www.airbnb.es/,hreflang_missing_x_default,High,Add hreflang=x-default pointing to https://www.airbnb.com/ in head template,html
+https://www.airbnb.de/,hreflang_missing_x_default,High,Add hreflang=x-default pointing to https://www.airbnb.com/ in head template,html
+https://www.airbnb.fr/,hreflang_missing_x_default,High,Add hreflang=x-default pointing to https://www.airbnb.com/ in head template,html
+https://www.airbnb.com/help,hreflang_missing_x_default,High,Add hreflang=x-default pointing to https://www.airbnb.com/help in head template,html
+https://www.airbnb.com/,homepage_geo_redirect_noindex,Medium,The geo-redirected homepage (airbnb.co.uk via 301 from airbnb.com) emits robots=noindex+nofollow. Verify intent and remove if unintentional.,html
+all,en_vs_en-US_coexistence,Low,Hreflang list includes both 'en' (no region) and 'en-US' / 'en-GB' / 'en-AU'. Audit whether 'en' is intentionally a global English fallback.,html
+all,subdomain_vs_cctld_inconsistency,Low,Most locales use ccTLDs (airbnb.de/fr/es) but es-US and zh-US use subdomains (es.airbnb.com / zh.airbnb.com). Document the convention.,html
