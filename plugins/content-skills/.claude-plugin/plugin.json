@@ -2,15 +2,15 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "content-skills",
   "displayName": "Content Skills",
-  "description": "Content Skills for Claude, by SE Ranking & Planable. Plan, brief, audit, refresh, and repurpose content with ready-to-run Claude Skills powered by live SE Ranking and Planable data — SEO content briefs, keyword clustering, niche content mining, E-E-A-T/AI-citation content audits, social post batches, content pattern intelligence, and combined SEO-gap / AI-search-gap / site-audit-to-social-distribution campaigns.",
+  "description": "Content Skills for Claude, by SE Ranking & Planable. Ten content-lifecycle pipelines on live SE Ranking + Planable data: campaign briefs with distribution and tracking, keyword clusters on a 12-week calendar, batch content refresh, socially validated niche plans, article-to-social packs, social-to-SEO idea mining, gap-to-content sprints, AI-visibility recovery, page recovery with a relaunch gate, and a shared brand profile.",
   "version": "1.0.0",
   "author": {
-    "name": "SE Ranking",
+    "name": "SE Ranking & Planable",
     "email": "api@seranking.com",
     "url": "https://seranking.com"
   },
   "homepage": "https://seranking.com/claude-content-skills.html",
-  "repository": "https://github.com/seranking/claude-plugins",
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
   "license": "MIT",
   "keywords": [
     "seo",
@@ -28,6 +28,10 @@
     "content-audit",
     "ai-search",
     "keyword-research",
-    "social-media"
+    "social-media",
+    "editorial-plan",
+    "content-refresh",
+    "brand-voice",
+    "repurposing"
   ]
 }

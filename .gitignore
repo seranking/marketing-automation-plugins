@@ -1,0 +1,11 @@
+# macOS / archives
+.DS_Store
+__MACOSX/
+*.zip
+._*
+
+# Editor / local
+.idea/
+.vscode/
+*.swp
+*~
