@@ -1,25 +1,25 @@
 {
-  "name": "seranking-claude-plugins",
+  "name": "marketing-automation-plugins",
   "owner": {
     "name": "SE Ranking",
     "email": "api@seranking.com"
   },
   "metadata": {
-    "description": "Official Claude Code plugin marketplace from SE Ranking and Planable. Content and marketing skills powered by the SE Ranking and Planable MCP servers.",
+    "description": "Marketing automation plugins from SE Ranking and Planable — content lifecycle and cross-channel marketing skills for Claude, Cursor, and Codex. Powered by the SE Ranking and Planable MCP servers.",
     "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "content-skills",
       "source": "./plugins/content-skills",
-      "description": "Plan, brief, audit, refresh, and repurpose content with ready-to-run Claude Skills powered by SE Ranking and Planable data — SEO content briefs, keyword clustering, niche content mining, E-E-A-T/AI-citation content audits, social post batches, content pattern intelligence, and combined SEO-gap / AI-search-gap / site-audit-to-social-distribution campaigns.",
+      "description": "Content Skills for Claude, by SE Ranking & Planable. Ten content-lifecycle pipelines on live SE Ranking + Planable data: campaign briefs with distribution and tracking, keyword clusters on a 12-week calendar, batch content refresh, socially validated niche plans, article-to-social packs, social-to-SEO idea mining, gap-to-content sprints, AI-visibility recovery, page recovery with a relaunch gate, and a shared brand profile.",
       "version": "1.0.0",
       "author": {
-        "name": "SE Ranking",
+        "name": "SE Ranking & Planable",
         "email": "api@seranking.com"
       },
       "homepage": "https://seranking.com/claude-content-skills.html",
-      "repository": "https://github.com/seranking/claude-plugins",
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
       "license": "MIT",
       "category": "content",
       "tags": [
@@ -35,7 +35,9 @@
         "agent-skills",
         "content-brief",
         "content-audit",
-        "ai-search"
+        "ai-search",
+        "editorial-plan",
+        "content-refresh"
       ],
       "keywords": [
         "seo",
@@ -52,14 +54,14 @@
     {
       "name": "marketing-skills",
       "source": "./plugins/marketing-skills",
-      "description": "Claude Marketing Skills by SE Ranking and Planable. Run SEO, AI visibility, and social workflows individually or as one connected ecosystem: keyword gap analysis, content briefs, AI search share of voice, PPC analysis, local SEO, SEO roadmaps, social post batches, approval roundups, calendar audits, cross-client metrics, SEO-to-social campaigns, onboarding proposals, and unified SEO + AI + social reports.",
+      "description": "Cross-channel marketing skills connecting SE Ranking (SEO + AI-search data) with Planable (social content workflow), organized as a pipeline: diagnose (gap matrix, AI-visibility benchmark, demand audits), act (campaigns, briefs, launches drafted in Planable), measure (campaign impact verdicts, cross-channel reports). Every campaign ships instrumented — label plus baseline passport — so results are provable. Requires both MCPs.",
       "version": "1.0.0",
       "author": {
         "name": "SE Ranking & Planable",
         "email": "api@seranking.com"
       },
       "homepage": "https://seranking.com/claude-marketing-skills.html",
-      "repository": "https://github.com/seranking/claude-plugins",
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
       "license": "MIT",
       "category": "marketing",
       "tags": [
@@ -73,8 +75,9 @@
         "planable",
         "claude-skills",
         "agent-skills",
+        "cross-channel",
+        "campaign-measurement",
         "content-brief",
-        "keyword-research",
         "share-of-voice",
         "ppc",
         "local-seo",
@@ -92,53 +95,9 @@
         "se-ranking",
         "planable",
         "claude-skills",
-        "content-brief",
-        "share-of-voice",
+        "cross-channel",
+        "campaign-measurement",
         "reporting"
-      ]
-    },
-    {
-      "name": "seo-skills",
-      "source": "./plugins/seo-skills",
-      "description": "Claude SEO Skills for the SE Ranking MCP server. Keyword research, content briefing, page intelligence, technical and content audits, structured data, drift monitoring, SXO diagnostics, competitive analysis, paid search, AI-search optimization, sitemap analysis, subdomain mapping, content opportunity mining, strategic roadmap planning, local SEO (GBP / NAP / local pack), international SEO (hreflang validation), Google APIs (GSC, PSI, CrUX, Indexing, GA4, YouTube, NLP), and SE Ranking API integration recipes (Data API + Project API).",
-      "version": "2.10.4",
-      "author": {
-        "name": "SE Ranking",
-        "email": "api@seranking.com"
-      },
-      "homepage": "https://github.com/seranking/seo-skills",
-      "repository": "https://github.com/seranking/claude-plugins",
-      "license": "MIT",
-      "category": "seo",
-      "tags": [
-        "seo",
-        "mcp",
-        "se-ranking",
-        "claude",
-        "claude-code",
-        "claude-skills",
-        "agent-skills",
-        "content-brief",
-        "ai-search",
-        "keyword-research",
-        "backlinks",
-        "site-audit",
-        "share-of-voice",
-        "aeo",
-        "geo",
-        "local-seo",
-        "hreflang"
-      ],
-      "keywords": [
-        "seo",
-        "mcp",
-        "se-ranking",
-        "claude-skills",
-        "content-brief",
-        "ai-search",
-        "keyword-research",
-        "backlinks",
-        "site-audit"
       ]
     }
   ]

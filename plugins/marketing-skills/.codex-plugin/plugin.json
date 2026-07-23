@@ -1,0 +1,36 @@
+{
+  "name": "marketing-skills",
+  "version": "1.0.0",
+  "description": "Cross-channel marketing pipeline (diagnose → act → measure) connecting SE Ranking SEO/AI-search data with Planable social workflows. Instrumented campaigns with baseline passports.",
+  "homepage": "https://seranking.com/claude-marketing-skills.html",
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
+  "keywords": [
+    "marketing",
+    "seo",
+    "smm",
+    "ai-search",
+    "cross-channel",
+    "se-ranking",
+    "planable",
+    "agency"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Marketing Skills",
+    "shortDescription": "Diagnose → act → measure across SEO, AI search, and social",
+    "longDescription": "Cross-channel marketing skills from SE Ranking and Planable. Diagnose opportunities (gap matrix, AI-visibility benchmark, demand audits), act with instrumented campaigns in Planable, and measure impact with baseline passports. 23 skills covering SEO, AI search, local, PPC counterplay, agency workflows, and reporting.",
+    "developerName": "SE Ranking & Planable",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://seranking.com",
+    "privacyPolicyURL": "https://seranking.com/legal/privacy-policy.html",
+    "termsOfServiceURL": "https://seranking.com/legal/terms-of-service.html",
+    "defaultPrompt": [
+      "Build a competitor gap matrix for [domain] vs [competitors].",
+      "Launch an SEO-to-social campaign for our top keyword gaps.",
+      "Produce a weekly ops briefing across approvals, calendar, and campaigns."
+    ],
+    "brandColor": "#2D2DF5"
+  }
+}

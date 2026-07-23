@@ -1,0 +1,24 @@
+{
+  "name": "content-skills",
+  "displayName": "Content Skills",
+  "description": "Content lifecycle pipelines powered by SE Ranking and Planable MCP — campaign briefs, editorial plans, niche plans, social packs, gap sprints, AI-visibility recovery, page recovery, and brand setup.",
+  "version": "1.0.0",
+  "author": {
+    "name": "SE Ranking & Planable",
+    "email": "api@seranking.com"
+  },
+  "homepage": "https://seranking.com/claude-content-skills.html",
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
+  "license": "MIT",
+  "category": "productivity",
+  "keywords": [
+    "SEO",
+    "content",
+    "social media",
+    "AI search",
+    "SE Ranking",
+    "Planable"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

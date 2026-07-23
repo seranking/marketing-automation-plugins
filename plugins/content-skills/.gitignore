@@ -1,0 +1,15 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Build / release artifacts (never commit these to the plugin repo)
+*.zip
+*.tar.gz
+
+# Local eval / review outputs
+*eval-review*.html
+content-skills-workspace/

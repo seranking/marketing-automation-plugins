@@ -1,72 +1,77 @@
 # Content Skills for Claude
 
-Production-ready [Claude Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for content planning, briefing, auditing, refreshing, and repurposing — powered by the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp/) and the [Planable remote MCP](https://mcp.planable.io/mcp).
+Production-ready [Claude Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for the content lifecycle — plan, brief, create, refresh, distribute, and measure — powered by the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp/) and the [Planable remote MCP](https://mcp.planable.io/mcp).
 
-This plugin packages 9 skills already published individually in [seranking/seo-skills](https://github.com/seranking/seo-skills) and [Planable/smm-skills](https://github.com/Planable/smm-skills) into one bundle focused specifically on the content lifecycle, as featured on [Content Skills for Claude, by SE Ranking & Planable](https://seranking.com/claude-content-skills.html).
+Featured on [Content Skills for Claude, by SE Ranking & Planable](https://seranking.com/claude-content-skills.html).
+
+**How this differs from [seranking/seo-skills](https://github.com/seranking/seo-skills) and [Planable/smm-skills](https://github.com/Planable/smm-skills):** those plugins ship single-deliverable tools (a brief, an audit verdict, a post batch). Every skill here is a pipeline — it produces the deliverable *plus* the distribution and measurement around it, and applies your saved brand profile. All three plugins install side by side with zero name collisions; each skill's description tells Claude when to route to the base tool instead.
 
 ## Skills
 
-### SEO content skills (SE Ranking data)
+### Plan & brief (SE Ranking + Planable)
 
-| Skill | What it produces | Source |
+| Skill | What it produces | vs the base tool |
 | --- | --- | --- |
-| [`seo-content-brief`](skills/seo-content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic — keyword research, SERP analysis, competitor teardown, internal-linking plan, AI Search citation angle | seo-skills |
-| [`seo-keyword-cluster`](skills/seo-keyword-cluster/SKILL.md) | Intent-grouped clusters with pillar + spokes architecture and H1/H2 suggestions per spoke | seo-skills |
-| [`seo-content-audit`](skills/seo-content-audit/SKILL.md) | E-E-A-T (60-item) + CITE (30-item) audit for existing content with a publish / publish-with-fixes / no-publish verdict | seo-skills |
-| [`seo-keyword-niche`](skills/seo-keyword-niche/SKILL.md) | Longtail + question keyword mining for niche content opportunities, with a content-tier plan and thin-content quality gates | seo-skills |
+| [`content-campaign-brief`](skills/content-campaign-brief/SKILL.md) | Writer-ready SEO brief + teaser social drafts in Planable around the publish date + keyword/AI-prompt tracking baseline | `seo-content-brief` stops at the document |
+| [`content-editorial-plan`](skills/content-editorial-plan/SKILL.md) | Keyword clusters mapped onto a 12-week publication calendar with cadence, brief queue, and monthly social themes | `seo-keyword-cluster` stops at the architecture |
+| [`content-niche-plan`](skills/content-niche-plan/SKILL.md) | Longtail content tier where every candidate is validated against social demand: build now / experiment / skip | `seo-keyword-niche` validates with search data only |
+| [`content-ideas-from-social`](skills/content-ideas-from-social/SKILL.md) | Top-performing social topics validated with SE Ranking keyword data → mini content plan | `content-pattern-intelligence` stops at patterns |
 
-### Social execution skills (Planable data)
+### Refresh & recover (SE Ranking + Planable)
 
-| Skill | What it produces | Source |
+| Skill | What it produces | vs the base tool |
 | --- | --- | --- |
-| [`draft-post-batch`](skills/draft-post-batch/SKILL.md) | Platform-adapted draft posts created directly in Planable from a brief, with preview before commit | smm-skills |
-| [`content-pattern-intelligence`](skills/content-pattern-intelligence/SKILL.md) | Recurring content patterns from top-performing posts, with real examples and hypotheses to test next | smm-skills |
+| [`content-refresh-pipeline`](skills/content-refresh-pipeline/SKILL.md) | Batch E-E-A-T/CITE audit (1–10 URLs) → prioritized refresh queue → per-page fix lists → re-distribution drafts → re-check plan | `seo-content-audit` verdicts one page |
+| [`content-page-recovery`](skills/content-page-recovery/SKILL.md) | Weak-page fixes with stakeholder approval in Planable, a relaunch quality gate, internal-link refresh, and post-fix measurement | `site-audit-to-social-distribution` has no relaunch gate |
+| [`content-ai-visibility`](skills/content-ai-visibility/SKILL.md) | AI share-of-voice snapshot + passage-level citability fixes for existing pages + social drafts + before/after re-check | `ai-search-gaps-to-social-campaign` is social-only |
 
-### Ecosystem skills (SE Ranking + Planable)
+### Distribute (Planable, SE Ranking where noted)
 
-| Skill | What it produces | Source |
+| Skill | What it produces | vs the base tool |
 | --- | --- | --- |
-| [`seo-gaps-to-social-campaign`](skills/seo-gaps-to-social-campaign/SKILL.md) | Themed social campaign drafted in Planable from SE Ranking keyword gaps, competitor wins, and ranking losses | smm-skills |
-| [`ai-search-gaps-to-social-campaign`](skills/ai-search-gaps-to-social-campaign/SKILL.md) | AI-visibility snapshot across ChatGPT/Perplexity/Gemini/AI Overview + social drafts targeting missing narratives | smm-skills |
-| [`site-audit-to-social-distribution`](skills/site-audit-to-social-distribution/SKILL.md) | Prioritised SEO fix list, rewritten page copy for review, and a coordinated social distribution batch | smm-skills |
+| [`content-social-pack`](skills/content-social-pack/SKILL.md) | One article URL → platform-adapted derivative set (LinkedIn, X thread, GBP, newsletter, quote hooks) grouped as a Planable campaign | `draft-post-batch` drafts from a topic, not an article |
+| [`content-gap-sprint`](skills/content-gap-sprint/SKILL.md) | SEO gaps → social campaign + article briefs for the top 2–3 gaps, sequenced into one sprint timeline | `seo-gaps-to-social-campaign` produces posts only |
 
-These skills are duplicated verbatim from their origin repos (kept in sync manually), not moved — they continue to exist and update independently in `seo-skills` and `smm-skills`.
+### Brand layer (no MCPs required)
+
+| Skill | What it produces |
+| --- | --- |
+| [`content-brand-setup`](skills/content-brand-setup/SKILL.md) | A `brand-profile.md` (voice, audience, banned words, CTA conventions) that every other skill in this plugin applies automatically |
 
 ## Install
 
-This plugin is distributed via the [`seranking/claude-plugins`](https://github.com/seranking/claude-plugins) marketplace.
+Distributed from the [`seranking/marketing-automation-plugins`](https://github.com/seranking/marketing-automation-plugins) marketplace (Claude, Cursor, and Codex ready).
 
 ### Claude Code (terminal)
 
 ```
-/plugin marketplace add seranking/claude-plugins
-/plugin install content-skills@seranking-claude-plugins
+/plugin marketplace add seranking/marketing-automation-plugins
+/plugin install content-skills@marketing-automation-plugins
 ```
 
 ### Claude Desktop / Cowork
 
 1. Open **Customize** in the sidebar.
 2. Click **Personal plugin** → **+ Add**, then choose **Add marketplace**.
-3. Enter `seranking/claude-plugins` and install `content-skills`.
+3. Enter `seranking/marketing-automation-plugins` and install `content-skills`.
 
 ### Connect the data sources
 
 Both MCP servers auto-register when you install the plugin:
 
-- **SE Ranking** (`https://api.seranking.com/mcp`) — required for all SEO content skills; requires an SE Ranking account with API/MCP access.
-- **Planable** (`https://mcp.planable.io/mcp`) — required for the social execution and ecosystem skills; requires a Planable account on the Team plan or higher.
+- **SE Ranking** (`https://api.seranking.com/mcp`) — required for the plan/brief/refresh skills; needs an SE Ranking account with API/MCP access.
+- **Planable** (`https://mcp.planable.io/mcp`) — required for distribution and approval steps; needs a Planable account on the Team plan or higher.
 
 Run `/mcp` on first use and sign in via OAuth for each.
 
-## How these skills chain
+## A typical lifecycle run
 
-1. `seo-keyword-cluster` or `seo-keyword-niche` — find the topic/cluster to write about.
-2. `seo-content-brief` — turn the topic into a writer-ready brief.
-3. `seo-content-audit` — check existing pages for E-E-A-T + AI-citation readiness before promoting them.
-4. `draft-post-batch` — turn an approved brief or a passing audit into social drafts in Planable.
-5. `content-pattern-intelligence` — see what's already working on social, to seed the next brief.
-6. `seo-gaps-to-social-campaign` / `ai-search-gaps-to-social-campaign` — turn SEO or AI-visibility gaps directly into a social campaign.
-7. `site-audit-to-social-distribution` — coordinate a page rewrite with its social announcement.
+1. `content-brand-setup` — once, so everything after speaks in your voice.
+2. `content-ideas-from-social` or `content-editorial-plan` — decide what to make.
+3. `content-campaign-brief` — brief the article with distribution and tracking built in.
+4. `content-social-pack` — atomize the published article into a platform pack.
+5. `content-refresh-pipeline` / `content-page-recovery` — keep what you shipped alive.
+6. `content-ai-visibility` — win the citations, then prove it with the re-check.
 
 ## Requirements
 

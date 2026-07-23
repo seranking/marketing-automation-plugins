@@ -1,0 +1,76 @@
+{
+  "name": "marketing-automation-plugins",
+  "owner": {
+    "name": "SE Ranking",
+    "email": "api@seranking.com"
+  },
+  "metadata": {
+    "description": "Marketing automation plugins from SE Ranking and Planable — content lifecycle and cross-channel marketing skills for Cursor agents. Powered by the SE Ranking and Planable MCP servers.",
+    "version": "1.0.0",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "content-skills",
+      "source": "content-skills",
+      "description": "Ten content-lifecycle pipelines on live SE Ranking + Planable data: campaign briefs, editorial plans, niche plans, social packs, gap sprints, AI-visibility recovery, page recovery, and brand setup.",
+      "version": "1.0.0",
+      "author": {
+        "name": "SE Ranking & Planable",
+        "email": "api@seranking.com"
+      },
+      "homepage": "https://seranking.com/claude-content-skills.html",
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
+      "license": "MIT",
+      "category": "productivity",
+      "tags": [
+        "seo",
+        "smm",
+        "content",
+        "mcp",
+        "se-ranking",
+        "planable",
+        "ai-search"
+      ],
+      "keywords": [
+        "seo",
+        "content",
+        "mcp",
+        "se-ranking",
+        "planable"
+      ]
+    },
+    {
+      "name": "marketing-skills",
+      "source": "marketing-skills",
+      "description": "Cross-channel marketing pipeline (diagnose → act → measure) connecting SE Ranking SEO/AI-search data with Planable social workflows. 23 skills with instrumented campaign passports.",
+      "version": "1.0.0",
+      "author": {
+        "name": "SE Ranking & Planable",
+        "email": "api@seranking.com"
+      },
+      "homepage": "https://seranking.com/claude-marketing-skills.html",
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
+      "license": "MIT",
+      "category": "productivity",
+      "tags": [
+        "marketing",
+        "seo",
+        "smm",
+        "ai-search",
+        "mcp",
+        "se-ranking",
+        "planable",
+        "agency"
+      ],
+      "keywords": [
+        "marketing",
+        "seo",
+        "cross-channel",
+        "mcp",
+        "se-ranking",
+        "planable"
+      ]
+    }
+  ]
+}

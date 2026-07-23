@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{CLIENT}} — Cross-channel report — {{PERIOD}}</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1c2b4a; --ink-soft:#5b6b8c; --bg:#f6f8fc; --card:#ffffff;
+    --accent:#3b6ff6; --accent-2:#7c5cff; --good:#1fa97c; --bad:#e5484d; --warn:#d99a1f;
+    --line:#e4e9f4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;background:var(--bg);color:var(--ink);padding:32px 20px;line-height:1.5}
+  .wrap{max-width:1040px;margin:0 auto}
+  header{margin-bottom:28px}
+  header h1{font-size:26px;font-weight:700}
+  header .sub{color:var(--ink-soft);font-size:14px;margin-top:4px}
+  .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:600;margin-left:8px;vertical-align:middle}
+  section{margin-bottom:28px}
+  h2{font-size:16px;font-weight:700;margin-bottom:12px;letter-spacing:.2px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .kpi .label{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.6px}
+  .kpi .value{font-size:26px;font-weight:700;margin-top:6px}
+  .kpi .delta{font-size:13px;font-weight:600;margin-top:2px}
+  .delta.up{color:var(--good)} .delta.down{color:var(--bad)} .delta.flat{color:var(--ink-soft)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid-2{grid-template-columns:1fr}}
+  .chart-box{position:relative;height:280px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{color:var(--ink-soft);font-size:12px;text-transform:uppercase;letter-spacing:.5px;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .campaign{border-left:4px solid var(--accent-2);margin-bottom:12px}
+  .campaign .name{font-weight:700}
+  .campaign .meta{font-size:13px;color:var(--ink-soft);margin:2px 0 8px}
+  .pill{display:inline-block;border-radius:12px;padding:1px 10px;font-size:12px;font-weight:600}
+  .pill.good{background:#e5f6ef;color:var(--good)} .pill.warn{background:#fdf3dd;color:var(--warn)} .pill.bad{background:#fdeaea;color:var(--bad)}
+  ul.callouts{list-style:none}
+  ul.callouts li{padding:8px 0 8px 22px;position:relative;border-bottom:1px dashed var(--line)}
+  ul.callouts li:last-child{border-bottom:none}
+  ul.callouts li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:700}
+  footer{color:var(--ink-soft);font-size:12px;border-top:1px solid var(--line);padding-top:14px;margin-top:32px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>{{CLIENT}} — cross-channel performance <span class="badge">{{PERIOD}}</span></h1>
+    <div class="sub">SEO rankings + AI-search visibility (SE Ranking) · Social engagement (Planable) · Generated {{GENERATED_DATE}} · Range {{DATE_FROM}} → {{DATE_TO}}</div>
+  </header>
+
+  <!-- KPI CARDS: populate values/deltas from real data; leave delta text empty when no prior period -->
+  <section>
+    <div class="kpis">
+      <div class="kpi"><div class="label">Organic traffic</div><div class="value">{{ORGANIC_TRAFFIC}}</div><div class="delta up">{{ORGANIC_DELTA}}</div></div>
+      <div class="kpi"><div class="label">AI presence / SoV</div><div class="value">{{AI_PRESENCE}}</div><div class="delta flat">{{AI_DELTA}}</div></div>
+      <div class="kpi"><div class="label">Social impressions</div><div class="value">{{SOCIAL_IMPRESSIONS}}</div><div class="delta up">{{SOCIAL_DELTA}}</div></div>
+      <div class="kpi"><div class="label">Engagement rate</div><div class="value">{{ENGAGEMENT_RATE}}</div><div class="delta flat">{{ER_DELTA}}</div></div>
+      <div class="kpi"><div class="label">Posts published</div><div class="value">{{POSTS_COUNT}}</div><div class="delta flat">{{POSTS_DELTA}}</div></div>
+    </div>
+  </section>
+
+  <section class="grid-2">
+    <div class="card">
+      <h2>Search & AI trend</h2>
+      <!-- Dual axis: series with very different scales must not share one axis -->
+      <div class="chart-box"><canvas id="searchTrend"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Social trend</h2>
+      <div class="chart-box"><canvas id="socialTrend"></canvas></div>
+    </div>
+  </section>
+
+  <section class="card" id="sovSection">
+    <h2>Share of voice vs competitors</h2>
+    <div class="chart-box"><canvas id="sovChart"></canvas></div>
+  </section>
+
+  <!-- CAMPAIGNS: one .campaign card per mkt:* label; delete the whole section if none -->
+  <section id="campaignsSection">
+    <h2>Campaigns</h2>
+    <div class="card campaign">
+      <div class="name">mkt:{{CAMPAIGN_SLUG}} <span class="pill good">{{CAMPAIGN_STATUS}}</span></div>
+      <div class="meta">Launched {{CAMPAIGN_DATE}} · {{CAMPAIGN_GOAL}}</div>
+      <table>
+        <thead><tr><th>Metric</th><th>Baseline (passport)</th><th>Now</th><th>Move</th></tr></thead>
+        <tbody>
+          <tr><td>{{METRIC_NAME}}</td><td>{{BASELINE_VALUE}}</td><td>{{CURRENT_VALUE}}</td><td>{{MOVE}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Top posts</h2>
+    <table>
+      <thead><tr><th>#</th><th>Platform</th><th>Post</th><th>Impressions</th><th>Engagement</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>{{PLATFORM}}</td><td>{{POST_PREVIEW}}</td><td>{{IMPRESSIONS}}</td><td>{{ENGAGEMENT}}</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>What moved / what to watch</h2>
+    <ul class="callouts">
+      <li>{{CALLOUT_1}}</li>
+      <li>{{CALLOUT_2}}</li>
+      <li>{{CALLOUT_3}}</li>
+    </ul>
+  </section>
+
+  <footer>
+    Sources: SE Ranking (search & AI visibility), Planable (social). This report covers what the two connectors return; it does not include cross-channel conversion attribution. Unsupported page-level analytics (X/Twitter, Pinterest, Threads, Google Business Profile) are excluded from totals. Partial periods are marked.
+  </footer>
+</div>
+
+<script>
+// ==== DATA (inline real values; никаких external files / localStorage) ====
+const months = {{MONTH_LABELS_JSON}};            // e.g. ["Mar","Apr","May","Jun"]
+const organicTraffic = {{ORGANIC_SERIES_JSON}};  // e.g. [41200, 43800, 45100, 48300]
+const aiOppTraffic  = {{AI_SERIES_JSON}};        // smaller scale -> second axis
+const socialImpr    = {{SOCIAL_IMPR_SERIES_JSON}};
+const socialEng     = {{SOCIAL_ENG_SERIES_JSON}};
+const sovBrands     = {{SOV_BRANDS_JSON}};       // ["Us","Comp A","Comp B"]
+const sovValues     = {{SOV_VALUES_JSON}};       // [12, 34, 9]
+
+const gridColor = "#e4e9f4", tickColor = "#5b6b8c";
+const baseOpts = {responsive:true, maintainAspectRatio:false,
+  plugins:{legend:{labels:{color:"#1c2b4a", boxWidth:12}}},
+  scales:{x:{grid:{color:gridColor},ticks:{color:tickColor}}}};
+
+new Chart(document.getElementById("searchTrend"), {type:"line",
+  data:{labels:months,datasets:[
+    {label:"Organic traffic",data:organicTraffic,borderColor:"#3b6ff6",backgroundColor:"rgba(59,111,246,.12)",fill:true,tension:.35,yAxisID:"y"},
+    {label:"AI opportunity traffic",data:aiOppTraffic,borderColor:"#7c5cff",borderDash:[6,4],tension:.35,yAxisID:"y2"}]},
+  options:{...baseOpts,scales:{...baseOpts.scales,
+    y:{position:"left",grid:{color:gridColor},ticks:{color:tickColor}},
+    y2:{position:"right",grid:{drawOnChartArea:false},ticks:{color:tickColor}}}}});
+
+new Chart(document.getElementById("socialTrend"), {type:"line",
+  data:{labels:months,datasets:[
+    {label:"Impressions",data:socialImpr,borderColor:"#1fa97c",backgroundColor:"rgba(31,169,124,.12)",fill:true,tension:.35,yAxisID:"y"},
+    {label:"Engagements",data:socialEng,borderColor:"#d99a1f",borderDash:[6,4],tension:.35,yAxisID:"y2"}]},
+  options:{...baseOpts,scales:{...baseOpts.scales,
+    y:{position:"left",grid:{color:gridColor},ticks:{color:tickColor}},
+    y2:{position:"right",grid:{drawOnChartArea:false},ticks:{color:tickColor}}}}});
+
+new Chart(document.getElementById("sovChart"), {type:"bar",
+  data:{labels:sovBrands,datasets:[{label:"AI share of voice, %",data:sovValues,
+    backgroundColor:sovBrands.map((b,i)=>i===0?"#3b6ff6":"#c9d6f4"),borderRadius:8}]},
+  options:{...baseOpts,scales:{x:{grid:{display:false},ticks:{color:tickColor}},
+    y:{grid:{color:gridColor},ticks:{color:tickColor,callback:v=>v+"%"}}}});
+</script>
+</body>
+</html>

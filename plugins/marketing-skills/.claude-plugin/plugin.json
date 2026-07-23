@@ -3,14 +3,14 @@
   "name": "marketing-skills",
   "displayName": "Marketing Skills",
   "version": "1.0.0",
-  "description": "Claude Marketing Skills by SE Ranking and Planable. Run SEO, AI visibility, and social workflows individually or as one connected ecosystem: keyword gap analysis, content briefs, AI search share of voice, PPC analysis, local SEO, SEO roadmaps, social post batches, approval roundups, calendar audits, cross-client metrics, SEO-to-social campaigns, onboarding proposals, and unified SEO + AI + social reports.",
+  "description": "Cross-channel marketing skills connecting SE Ranking (SEO + AI-search data) with Planable (social content workflow), organized as a pipeline: diagnose (gap matrix, AI-visibility benchmark, demand audits), act (campaigns, briefs, launches drafted in Planable), measure (campaign impact verdicts, cross-channel reports). Every campaign ships instrumented - label plus baseline passport - so results are provable. Requires both MCPs.",
   "author": {
     "name": "SE Ranking & Planable",
     "email": "api@seranking.com",
     "url": "https://seranking.com"
   },
   "homepage": "https://seranking.com/claude-marketing-skills.html",
-  "repository": "https://github.com/seranking/claude-plugins",
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
   "license": "MIT",
   "keywords": [
     "marketing",
@@ -26,6 +26,8 @@
     "claude-skills",
     "agent-skills",
     "anthropic",
+    "cross-channel",
+    "campaign-measurement",
     "content-brief",
     "keyword-research",
     "share-of-voice",
