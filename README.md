@@ -2,14 +2,12 @@
 
 Official plugin marketplace from [SE Ranking](https://seranking.com) and [Planable](https://planable.io) for marketing automation agents.
 
-Two plugins, zero skill name collisions — install what you need:
-
 | Plugin | Skills | Best for |
 | --- | --- | --- |
 | [`content-skills`](plugins/content-skills/) | 10 | Content lifecycle pipelines: briefs, editorial plans, refresh, social packs, page recovery |
 | [`marketing-skills`](plugins/marketing-skills/) | 23 | Cross-channel marketing: diagnose → act → measure across SEO, AI search, and social |
 
-Both plugins share the same MCP backends (SE Ranking + Planable). They are designed to install side by side with [`seranking/seo-skills`](https://github.com/seranking/seo-skills) and [`Planable/smm-skills`](https://github.com/Planable/smm-skills) — every skill here uses a `content-` or `marketing-` prefix, so names never collide.
+Both plugins share the same MCP backends (SE Ranking + Planable). They are designed to install side by side with [`seranking/seo-skills`](https://github.com/seranking/seo-skills) and [`Planable/smm-skills`](https://github.com/Planable/smm-skills).
 
 ## Install — Claude Code
 
