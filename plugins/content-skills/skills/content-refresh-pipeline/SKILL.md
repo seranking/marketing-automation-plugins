@@ -30,13 +30,13 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
      - DOM-level byline detection: locate the structural byline (`<a rel="author">`, `<meta name="author">`, `<span class="byline">`, `[itemprop="author"]`). Distinguish a real byline element from prose mentions ("Written by Jane in collaboration..." in body text is not a byline; `<a rel="author">Jane Doe</a>` is).
    - **If Firecrawl unavailable:** WebFetch portion runs unchanged. Mark schema-type detection and structural byline detection as `(skipped — Firecrawl required)` in `evidence/01-content-snapshot.md`. Step 4's veto checks #1 and #4 fall back to prose-level inspection (less reliable) — surface that caveat in `VERDICT.md`.
 
-2. **AIO context** `DATA_getAiOverview` and `DATA_getAiOverviewLeaderboard`
+2. **AIO context** `DATA_getAiSearchOverview` and `DATA_getAiSearchLeaderboard`
    - For the target keyword: is there an AIO?
    - Who is cited in the AIO?
    - Is the candidate URL cited?
    - What patterns characterise the cited sources (publication tier, freshness, structure)?
 
-3. **AIO prompt sampling** `DATA_getAiPromptsByTarget`
+3. **AIO prompt sampling** `DATA_getAiSearchPromptsByTarget`
    - Sample LLM prompts where the target URL's domain appears as a source.
    - Cross-reference with the candidate URL — does it show up in any sampled prompts?
 
@@ -151,7 +151,7 @@ See:
 ## Tips
 
 - Respect rate limit. AIO + AIO-prompts queries are ~5–10 calls; plenty of headroom.
-- Call `DATA_getCreditBalance` before running. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (default cap 50 URLs).
+- Call `DATA_getSubscription` before running to read the plan's remaining unit limits. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (default cap 50 URLs).
 - The thresholds (75% E-E-A-T, 70% CITE) are starting points. Tune per domain — a YMYL site (medical, financial) should require higher (85%/80%); a general-interest blog can run lower (65%/60%).
 - The veto checks are not negotiable. A piece with anonymous authorship on a YMYL topic doesn't pass regardless of score.
 - For pieces that score "publish with fixes," the top-5 list is the deliverable. Hand it to the writer; re-audit after fixes.

@@ -38,7 +38,7 @@ Diagnose why a "well-optimized" page doesn't rank. Reads the actual SERP for the
      - **`mode=lite` (`result_type=standard`):** organic top-10 only, no SERP features, ≈ 50–100 credits. Use when (a) the user is screening many keywords and SERP features aren't load-bearing, (b) credits are constrained, (c) the user explicitly asks for a cheap pass. The persona scoring still runs but the SERP-features row in `SXO-REPORT.md` will read `(skipped — lite mode)` and the dominant-pattern detection will rely on URL/title heuristics alone.
      - Surface the chosen mode + estimated cost up front. If the user didn't specify and the keyword looks ad-heavy or commercial-high-volume, recommend `mode=lite` first and re-run with `mode=full` only if dominant-pattern confidence is low.
 
-3. **Pull AIO context** `DATA_getAiOverview`
+3. **Pull AIO context** `DATA_getAiSearchOverview`
    - If AIO is present for the keyword, capture the answer text and citation list.
    - Note which top-10 organic results are also cited in the AIO.
 

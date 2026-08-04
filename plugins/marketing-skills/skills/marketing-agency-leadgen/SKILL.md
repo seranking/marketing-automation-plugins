@@ -24,7 +24,7 @@ Produce a production-ready landing page for an SEO agency offering a free audit 
 
 ## Process
 
-1. **Niche data pull** `DATA_getDomainOverviewWorldwide`, `DATA_getDomainCompetitors`, `DATA_getAiOverview`
+1. **Niche data pull** `DATA_getDomainOverviewWorldwide`, `DATA_getDomainCompetitors`, `DATA_getAiSearchOverview`
    - If a sample client domain was provided, pull their organic traffic, top competitors, and AI Overview exposure.
    - Extract 3 concrete, pitchable numbers for the page (e.g., "agencies in this niche average 12k organic visits/mo. Top performers average 180k.").
 

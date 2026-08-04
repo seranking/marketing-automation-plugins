@@ -9,7 +9,7 @@ description: >
   campaigns", "what's stuck and does it matter", "approval queue by priority", or wants a
   morning check-in that ranks the queue. Requires the Planable MCP (SE Ranking optional — adds
   the demand-window flag). For a plain chronological approvals list, use
-  pending-approvals-roundup from the smm-skills plugin instead.
+  pending-approvals-roundup from the smm-skills plugin instead, when that plugin is installed.
 ---
 
 # Approvals impact triage

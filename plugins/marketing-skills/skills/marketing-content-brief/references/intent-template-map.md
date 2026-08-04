@@ -2,12 +2,12 @@
 
 > Adapted from `AgriciDaniel/claude-seo`'s `seo-cluster/references/hub-spoke-architecture.md` (MIT).
 
-Use this map at brief time to classify the article being briefed against one of 8 canonical templates. Selection is driven by the SERP top-10 (page-type majority) and the keyword's intent classification from `DATA_getRelatedKeywords` / `DATA_getKeywordQuestions`. Cross-reference word-count floors against the page-type rubric the auditor uses in `skills/seo-content-audit/` — the brief's "Word count target" must clear the floor for the chosen template.
+Use this map at brief time to classify the article being briefed against one of 8 canonical templates. Selection is driven by the SERP top-10 (page-type majority) and the keyword's intent classification from `DATA_getRelatedKeywords` / `DATA_getKeywordQuestions`. Each template below carries its own **Word count floor** — the brief's "Word count target" must clear the floor for the chosen template.
 
 ## How to use
 
 1. Pull SERP top-10 + PAA + AIO presence (already collected in step 5 of `SKILL.md`).
-2. Classify each top-10 URL by page type (use the heuristics in `skills/seo-sxo/references/page-type-patterns.md`).
+2. Classify each top-10 URL by page type (use the heuristics in the sibling `marketing-serp-fit` skill's `references/page-type-patterns.md`).
 3. Take the dominant type (≥ 6 of 10) → that's your template. If split (e.g. 4-4-2), see the MIXED rule in `SKILL.md` Tips.
 4. Sanity-check against the keyword's intent classification (informational broad / informational how / commercial compare / etc.).
 5. Record the chosen template + a one-sentence justification in `BRIEF.md`'s "Template type" + "Why this template" lines.
@@ -20,7 +20,7 @@ Use this map at brief time to classify the article being briefed against one of 
 - **SERP signals:** PAA cluster of 6+ "what is / how does / types of" questions; top-10 dominated by long-form editorial on .com/blog or .com/guide; AIO almost always present; titles often "The Ultimate Guide to X" / "X: A Complete Guide".
 - **Intent classification:** informational (broad).
 - **Outline shape:** H1 = "{Topic}: The Complete Guide" → H2s: What is X · Why X matters · Core components of X (3-6 sub-H2s) · How to get started with X · Common pitfalls · X vs adjacent concepts · FAQ.
-- **Word count floor:** 2,500 words. Use 3,000-4,000 for high-volume head terms. (See `seo-content-audit` for E-E-A-T thresholds at this length — anonymous bylines fail the YMYL veto regardless.)
+- **Word count floor:** 2,500 words. Use 3,000-4,000 for high-volume head terms. (See the `seo-content-audit` skill in `seranking/seo-skills`, when that plugin is installed, for E-E-A-T thresholds at this length — anonymous bylines fail the YMYL veto regardless.)
 - **Example brief patterns** (paraphrased from real published winners):
   - "Marketing Attribution: The Complete Guide" — 3,800 words, 9 H2s, 1 model-comparison table, 2 case-study callouts, FAQ block of 8 PAA-derived questions.
   - "What Is Vendor Risk Management" — 3,200 words, opens with a 180-word definition for AIO citability, then framework / lifecycle / tooling / metrics / FAQ.

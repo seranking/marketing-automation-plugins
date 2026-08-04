@@ -10,7 +10,7 @@ description: >
   "build a cross-channel dashboard", or "one report that covers rankings, AI visibility and social".
   Always activate when the request spans both search (SE Ranking) and social (Planable) in a single
   report. Requires both MCPs. For a social-only monthly summary use monthly-performance-summary from
-  the smm-skills plugin; for the verdict on one specific campaign use marketing-campaign-impact.
+  the smm-skills plugin when installed; for the verdict on one specific campaign use marketing-campaign-impact.
 ---
 
 # Unified SEO + AI + social report
@@ -73,12 +73,12 @@ Use the bundled template at `assets/report-template.html` as the starting point 
 - **Campaigns:** one card per `mkt:*` campaign — posts, engagement, tracked-term movement, baseline→current where a passport exists (omit the section if no campaigns).
 - **Top posts** and **What moved / What to watch** — same callouts as the text summary.
 
-Inline the data as JavaScript arrays in the file (no external data files, no `localStorage`). Save to the outputs folder as `{client}-{period}-cross-channel-report.html`, then share it with `present_files`. Validate the inline script parses (a quick `node --check`-style pass) before presenting.
+Inline the data as JavaScript arrays in the file (no external data files, no `localStorage`). Save it to the working folder as `{client}-{period}-cross-channel-report.html`, then share it with the user — use `present_files` when that tool is available, otherwise give them the file path. Validate the inline script parses (a quick `node --check`-style pass) before presenting.
 
 ## Output
 
 1. **Quick conclusions** — short text summary in chat (the numbers + 2–3 callouts).
-2. **Interactive HTML report** — self-contained file, presented via `present_files`, with KPI cards, hoverable trend charts, share-of-voice, and top posts.
+2. **Interactive HTML report** — self-contained file saved to the working folder and shared with the user, with KPI cards, hoverable trend charts, share-of-voice, and top posts.
 
 ## Tips
 
