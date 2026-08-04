@@ -9,7 +9,7 @@ description: >
   match what people search", "calendar audit with demand", "gaps in the schedule", "review the
   content plan for [client]", or wants a weekly/monthly calendar review that judges substance,
   not just dates. Requires both the SE Ranking and Planable MCPs. For a schedule-only review
-  without the demand layer, use content-calendar-audit from the smm-skills plugin instead.
+  without the demand layer, use content-calendar-audit from the smm-skills plugin instead, when that plugin is installed.
 ---
 
 # Calendar × demand audit

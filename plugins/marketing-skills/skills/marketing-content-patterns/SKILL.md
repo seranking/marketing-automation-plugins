@@ -9,7 +9,7 @@ description: >
   more of", "what patterns do you see", "give me content ideas based on my best posts", "what
   should I try next month", or wants creative direction that extends to site content. Requires
   both MCPs (works from a CSV too — demand validation still runs). For pattern analysis without
-  the demand layer, use content-pattern-intelligence from the smm-skills plugin instead.
+  the demand layer, use content-pattern-intelligence from the smm-skills plugin instead, when that plugin is installed.
 ---
 
 # Content patterns × demand
@@ -320,7 +320,7 @@ Plus flag anything else that affects confidence: small sample size, one platform
 
 ### HTML visual report
 
-After delivering the in-chat text analysis, generate a self-contained HTML file saved to `/mnt/user-data/outputs/[client]-content-patterns-[month].html` and present it with `present_files`.
+After delivering the in-chat text analysis, generate a self-contained HTML file saved to the working folder as `[client]-content-patterns-[month].html` and share it with the user — use `present_files` when that tool is available, otherwise give them the file path.
 
 The HTML report is the visual companion to the text output — same structure, same data, but charts replace walls of text. Design it to be shareable with a client or team lead.
 

@@ -9,7 +9,7 @@ description: >
   plan", "how did we do and what should we do next month", or wants the month's results turned
   into the next month's calendar. Requires both MCPs (CSV mode works too — demand still pulls if
   the domain is known). For a recap without the forward plan, use monthly-performance-summary
-  from the smm-skills plugin; for the cross-channel period report, use marketing-report.
+  from the smm-skills plugin when installed; for the cross-channel period report, use marketing-report.
 ---
 
 # Month close & next plan
@@ -99,7 +99,7 @@ Deliver the report as a **downloadable HTML file** — a self-contained visual r
 
 ### Visual HTML report
 
-Generate a single `.html` file saved to the outputs folder as `[client-name]-[month]-close.html`. Use `present_files` after creating it.
+Generate a single `.html` file saved to the working folder as `[client-name]-[month]-close.html`, then share it with the user — use `present_files` when that tool is available, otherwise give them the file path.
 
 The report must be visually designed — not a raw data dump. Follow these design principles:
 

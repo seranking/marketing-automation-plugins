@@ -8,7 +8,7 @@ description: >
   clients across channels: "how are all my clients doing", "cross-client scorecard", "agency
   overview across SEO and social", "which client is slipping where", "compare accounts across
   channels". Requires both MCPs. For a social-only multi-workspace comparison, use
-  cross-client-metrics-overview from the smm-skills plugin; for one client's deep report, use
+  cross-client-metrics-overview from the smm-skills plugin when installed; for one client's deep report, use
   marketing-report.
 ---
 

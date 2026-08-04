@@ -10,7 +10,7 @@ description: >
   search for", "validated post batch", "fill the calendar with topics worth posting about",
   "create N posts about [topic] and check they're worth it" — or any batch where topic choice
   should be evidence-based. Requires both the SE Ranking and Planable MCPs. For a quick batch
-  from a brief without demand validation, use draft-post-batch from the smm-skills plugin instead.
+  from a brief without demand validation, use draft-post-batch from the smm-skills plugin instead, when that plugin is installed.
 ---
 
 # Demand-validated post batch

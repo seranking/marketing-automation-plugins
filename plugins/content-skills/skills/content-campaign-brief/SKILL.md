@@ -38,7 +38,7 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
    - `DATA_getSerpResults` for the top 10 organic + SERP features (AIO, PAA, Featured Snippet, Video).
    - `DATA_getRelatedKeywords` and `DATA_getSimilarKeywords` for expansion.
    - `DATA_getKeywordQuestions` for People-Also-Ask and question-based variations.
-   - `DATA_getAiOverview` + `DATA_getAiOverviewLeaderboard` to see which brands LLMs cite today for the topic.
+   - `DATA_getAiSearchOverview` + `DATA_getAiSearchLeaderboard` to see which brands LLMs cite today for the topic.
 
 6. **Top 3 content analysis** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
    - **WebFetch first** (free, instant): pull markdown for the top 3 ranking URLs. Extract H1/H2/H3 spine, word count per article, shared subtopics, gaps, and prose-level formatting patterns.

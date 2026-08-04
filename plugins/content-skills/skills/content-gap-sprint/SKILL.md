@@ -1,6 +1,6 @@
 ---
 name: content-gap-sprint
-description: Turn SE Ranking gap research into a full content sprint, not just posts. Keyword gaps, competitor wins, question keywords, and ranking losses become a themed social campaign drafted in Planable PLUS light article briefs for the top 2–3 gaps (angle, outline, internal links), sequenced into one sprint plan where posts intercept demand now and articles capture it durably. Use whenever the user wants to close search gaps with content across channels — "turn these keyword gaps into a plan", "our competitor ranks for X, respond with content", "content sprint from SEO data", "gap-to-content plan", "what should we create based on where we're losing". Requires the SE Ranking and Planable MCPs. For a social-only campaign from SEO insights, without article briefs, use seo-gaps-to-social-campaign from Planable/smm-skills instead.
+description: Turn SE Ranking gap research into a full content sprint, not just posts. Keyword gaps, competitor wins, question keywords, and ranking losses become a themed social campaign drafted in Planable PLUS light article briefs for the top 2–3 gaps (angle, outline, internal links), sequenced into one sprint plan where posts intercept demand now and articles capture it durably. Use whenever the user wants to close search gaps with content across channels — "turn these keyword gaps into a plan", "our competitor ranks for X, respond with content", "content sprint from SEO data", "gap-to-content plan", "what should we create based on where we're losing". Requires the SE Ranking and Planable MCPs. For a social-only campaign from SEO insights, without article briefs, use seo-gaps-to-social-campaign from seranking/seo-skills instead.
 ---
 
 # Content Gap Sprint
@@ -66,7 +66,7 @@ Show all drafts in a preview before creating anything, unless the user said "jus
 - If the user wants the batch tagged, call `list_labels` (or `create_label`) and pass the label UUIDs. A campaign label (e.g. "SEO-driven") makes later reporting easy.
 
 ### 6. Confirm and hand off
-Report how many drafts were created, in which workspace/pages, the proposed schedule, and any `validationErrors` (e.g. Instagram needs media — flag it). Offer to set up rank/AI tracking for the targeted terms, or to report on the campaign later (the `seo-ai-social-report` skill from Planable/smm-skills).
+Report how many drafts were created, in which workspace/pages, the proposed schedule, and any `validationErrors` (e.g. Instagram needs media — flag it). Offer to set up rank/AI tracking for the targeted terms, or to report on the campaign later (the `seo-ai-social-report` skill from seranking/seo-skills).
 
 ## Content pointers: writing for keywords & AI visibility gaps
 
