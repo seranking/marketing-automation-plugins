@@ -52,6 +52,51 @@
       ]
     },
     {
+      "name": "ecosystem-skills",
+      "source": "./plugins/ecosystem-skills",
+      "description": "The three core SE Ranking + Planable ecosystem use cases in one focused plugin: map a brand's whole footprint across search rankings, AI answers and social; turn real search demand into a drafted social campaign in Planable; and claim the AI-answer narratives competitors own. See → act → see again, with every campaign instrumented — label plus baseline passport — so re-running the map proves what moved. Requires both MCPs.",
+      "version": "1.3.2",
+      "author": {
+        "name": "SE Ranking & Planable",
+        "email": "api@seranking.com"
+      },
+      "homepage": "https://seranking.com/claude-marketing-skills.html",
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
+      "license": "MIT",
+      "category": "marketing",
+      "tags": [
+        "ecosystem",
+        "marketing",
+        "seo",
+        "smm",
+        "social-media",
+        "ai-search",
+        "mcp",
+        "se-ranking",
+        "planable",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "agent-skills",
+        "cross-channel",
+        "aeo",
+        "geo",
+        "campaign-measurement",
+        "agency"
+      ],
+      "keywords": [
+        "ecosystem",
+        "marketing",
+        "seo",
+        "smm",
+        "ai-search",
+        "se-ranking",
+        "planable",
+        "cross-channel",
+        "campaign-measurement"
+      ]
+    },
+    {
       "name": "marketing-skills",
       "source": "./plugins/marketing-skills",
       "description": "Cross-channel marketing skills connecting SE Ranking (SEO + AI-search data) with Planable (social content workflow), organized as a pipeline: diagnose (gap matrix, AI-visibility benchmark, demand audits), act (campaigns, briefs, launches drafted in Planable), measure (campaign impact verdicts, cross-channel reports). Every campaign ships instrumented — label plus baseline passport — so results are provable. Requires both MCPs.",

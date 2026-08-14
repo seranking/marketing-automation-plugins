@@ -1,0 +1,38 @@
+{
+  "name": "ecosystem-skills",
+  "version": "1.3.2",
+  "description": "The three core SE Ranking + Planable ecosystem use cases: whole-footprint map across search, AI answers and social, plus the two campaigns that close the gaps it finds.",
+  "homepage": "https://seranking.com/claude-marketing-skills.html",
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
+  "keywords": [
+    "ecosystem",
+    "marketing",
+    "seo",
+    "smm",
+    "ai-search",
+    "cross-channel",
+    "se-ranking",
+    "planable"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Ecosystem Skills",
+    "shortDescription": "See your whole footprint, then close the gaps",
+    "longDescription": "The three core use cases for the SE Ranking + Planable ecosystem. Map a brand's topics across search rankings, AI-answer citations and social performance at once; turn real search demand into a drafted social campaign in Planable; and claim the narratives AI answers currently give to competitors. Every campaign ships instrumented, so re-running the map shows what moved.",
+    "developerName": "SE Ranking & Planable",
+    "category": "Productivity",
+    "capabilities": [
+      "Read"
+    ],
+    "websiteURL": "https://seranking.com",
+    "privacyPolicyURL": "https://seranking.com/legal/privacy-policy.html",
+    "termsOfServiceURL": "https://seranking.com/legal/terms-of-service.html",
+    "defaultPrompt": [
+      "Map our whole footprint across search, AI answers and social for [domain].",
+      "Which topics rank well that our social has never touched?",
+      "Turn our top keyword gaps into a social campaign in Planable."
+    ],
+    "brandColor": "#2D2DF5"
+  }
+}
