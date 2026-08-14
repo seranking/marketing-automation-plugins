@@ -41,6 +41,39 @@
       ]
     },
     {
+      "name": "ecosystem-skills",
+      "source": "ecosystem-skills",
+      "description": "The three core SE Ranking + Planable ecosystem use cases: a whole-footprint map across search, AI answers and social, plus the two campaigns that close the gaps it finds. 3 skills with instrumented campaign passports.",
+      "version": "1.3.2",
+      "author": {
+        "name": "SE Ranking & Planable",
+        "email": "api@seranking.com"
+      },
+      "homepage": "https://seranking.com/claude-marketing-skills.html",
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
+      "license": "MIT",
+      "category": "productivity",
+      "tags": [
+        "ecosystem",
+        "marketing",
+        "seo",
+        "smm",
+        "ai-search",
+        "mcp",
+        "se-ranking",
+        "planable",
+        "cross-channel"
+      ],
+      "keywords": [
+        "ecosystem",
+        "marketing",
+        "cross-channel",
+        "mcp",
+        "se-ranking",
+        "planable"
+      ]
+    },
+    {
       "name": "marketing-skills",
       "source": "marketing-skills",
       "description": "Cross-channel marketing pipeline (diagnose → act → measure) connecting SE Ranking SEO/AI-search data with Planable social workflows. 23 skills with instrumented campaign passports.",
