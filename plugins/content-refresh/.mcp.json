@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "se-ranking": {
+      "type": "http",
+      "url": "https://api.seranking.com/mcp"
+    },
+    "firecrawl": {
+      "type": "http",
+      "url": "https://mcp.firecrawl.dev/v2/mcp-oauth"
+    }
+  }
+}

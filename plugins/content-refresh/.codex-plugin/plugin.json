@@ -1,0 +1,35 @@
+{
+  "name": "content-refresh",
+  "version": "1.0.0",
+  "description": "Audit → approve → refresh. Finds decayed content with SE Ranking data, diagnoses why each page dropped, and generates surgical, fact-checked update drafts after in-chat approval. Two skills: refresh-audit and refresh-update.",
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
+  "keywords": [
+    "seo",
+    "content-refresh",
+    "content-audit",
+    "content-decay",
+    "se-ranking",
+    "firecrawl"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Content Refresh",
+    "shortDescription": "Diagnose content decay, approve, get refreshed drafts",
+    "longDescription": "A two-skill flow for refreshing existing content. refresh-audit finds decayed pages (or takes your URLs), scrapes them, diagnoses why each one dropped — staleness, competitor gaps, intent shift, lost SERP features, AI-visibility loss, cannibalization — and proposes the lightest update depth that fixes it, with preservation locks on everything that still works. You approve in chat; refresh-update then writes each refreshed article as a fact-checked markdown draft. It never publishes anywhere.",
+    "developerName": "Oleksii Khoroshun — SE Ranking",
+    "category": "Productivity",
+    "capabilities": [
+      "Read"
+    ],
+    "websiteURL": "https://seranking.com",
+    "privacyPolicyURL": "https://seranking.com/legal/privacy-policy.html",
+    "termsOfServiceURL": "https://seranking.com/legal/terms-of-service.html",
+    "defaultPrompt": [
+      "Audit my content — find the decayed pages on mydomain.com and tell me why they dropped.",
+      "Audit these URLs and propose the lightest refresh for each.",
+      "Go ahead with the approved updates and generate the drafts."
+    ],
+    "brandColor": "#2D2DF5"
+  }
+}

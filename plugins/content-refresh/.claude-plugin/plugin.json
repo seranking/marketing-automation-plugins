@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "content-refresh",
+  "displayName": "Content Refresh",
+  "version": "1.0.0",
+  "description": "Audit → approve → refresh. Finds decayed content with SE Ranking data (and real Search Console ground truth if connected), diagnoses why each page dropped, and generates surgical, fact-checked update drafts. Two skills: refresh-audit (analyze + propose) and refresh-update (write the approved refreshes). No databases, no channels — everything happens in chat and plain files.",
+  "author": {
+    "name": "Oleksii Khoroshun — SE Ranking"
+  },
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
+  "license": "MIT",
+  "keywords": [
+    "seo",
+    "content-refresh",
+    "content-audit",
+    "content-decay",
+    "se-ranking",
+    "firecrawl",
+    "ai-visibility",
+    "google-search-console"
+  ]
+}

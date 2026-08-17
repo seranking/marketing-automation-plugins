@@ -5,6 +5,18 @@
   },
   "plugins": [
     {
+      "name": "content-refresh",
+      "source": {
+        "source": "local",
+        "path": "./plugins/content-refresh"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "content-skills",
       "source": {
         "source": "local",
