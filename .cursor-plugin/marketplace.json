@@ -11,6 +11,35 @@
   },
   "plugins": [
     {
+      "name": "content-refresh",
+      "source": "content-refresh",
+      "description": "Audit → approve → refresh. Diagnoses why each page decayed with SE Ranking data, proposes the lightest fix, and writes fact-checked update drafts after in-chat approval. 2 skills; requires SE Ranking + Firecrawl.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Oleksii Khoroshun — SE Ranking"
+      },
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
+      "license": "MIT",
+      "category": "productivity",
+      "tags": [
+        "seo",
+        "content-refresh",
+        "content-audit",
+        "content-decay",
+        "mcp",
+        "se-ranking",
+        "firecrawl"
+      ],
+      "keywords": [
+        "seo",
+        "content-refresh",
+        "content-decay",
+        "mcp",
+        "se-ranking",
+        "firecrawl"
+      ]
+    },
+    {
       "name": "content-skills",
       "source": "content-skills",
       "description": "Ten content-lifecycle pipelines on live SE Ranking + Planable data: campaign briefs, editorial plans, niche plans, social packs, gap sprints, AI-visibility recovery, page recovery, and brand setup.",

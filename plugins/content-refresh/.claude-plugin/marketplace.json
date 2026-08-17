@@ -1,0 +1,25 @@
+{
+  "name": "content-refresh",
+  "owner": {
+    "name": "Oleksii Khoroshun",
+    "email": "oleksii.khoroshun@seranking.com"
+  },
+  "metadata": {
+    "description": "Audit → approve → refresh. Diagnose content decay with SE Ranking data (plus optional real Search Console ground truth) and generate surgical, fact-checked update drafts. No databases, no channels — chat and plain files.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "content-refresh",
+      "source": "./",
+      "description": "Two skills: refresh-audit (find decayed pages, diagnose why, propose the lightest fix, get approval in chat) and refresh-update (write the approved refreshes, fact-checked, as markdown drafts). Requires the SE Ranking and Firecrawl connectors; a Google Search Console connector is optional and adds real click/impression ground truth when present.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Oleksii Khoroshun",
+        "email": "oleksii.khoroshun@seranking.com"
+      },
+      "license": "MIT",
+      "category": "seo"
+    }
+  ]
+}

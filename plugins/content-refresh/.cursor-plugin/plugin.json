@@ -1,0 +1,22 @@
+{
+  "name": "content-refresh",
+  "displayName": "Content Refresh",
+  "description": "Audit → approve → refresh. Finds decayed content with SE Ranking data, diagnoses why each page dropped, and generates surgical, fact-checked update drafts after in-chat approval. Two skills: refresh-audit and refresh-update.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Oleksii Khoroshun — SE Ranking"
+  },
+  "repository": "https://github.com/seranking/marketing-automation-plugins",
+  "license": "MIT",
+  "category": "productivity",
+  "keywords": [
+    "seo",
+    "content-refresh",
+    "content-audit",
+    "content-decay",
+    "se-ranking",
+    "firecrawl"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

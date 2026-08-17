@@ -10,6 +10,44 @@
   },
   "plugins": [
     {
+      "name": "content-refresh",
+      "source": "./plugins/content-refresh",
+      "description": "Audit → approve → refresh. Finds decayed content with SE Ranking data (and real Search Console ground truth if connected), diagnoses why each page dropped, and generates surgical, fact-checked update drafts. Two skills: refresh-audit (analyze + propose) and refresh-update (write the approved refreshes). No databases, no channels — everything happens in chat and plain files. Requires the SE Ranking and Firecrawl MCPs; Planable is not needed.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Oleksii Khoroshun — SE Ranking"
+      },
+      "repository": "https://github.com/seranking/marketing-automation-plugins",
+      "license": "MIT",
+      "category": "seo",
+      "tags": [
+        "seo",
+        "content-refresh",
+        "content-audit",
+        "content-decay",
+        "content-update",
+        "se-ranking",
+        "firecrawl",
+        "ai-visibility",
+        "google-search-console",
+        "mcp",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "agent-skills"
+      ],
+      "keywords": [
+        "seo",
+        "content-refresh",
+        "content-audit",
+        "content-decay",
+        "se-ranking",
+        "firecrawl",
+        "ai-visibility",
+        "google-search-console"
+      ]
+    },
+    {
       "name": "content-skills",
       "source": "./plugins/content-skills",
       "description": "Content Skills for Claude, by SE Ranking & Planable. Ten content-lifecycle pipelines on live SE Ranking + Planable data: campaign briefs with distribution and tracking, keyword clusters on a 12-week calendar, batch content refresh, socially validated niche plans, article-to-social packs, social-to-SEO idea mining, gap-to-content sprints, AI-visibility recovery, page recovery with a relaunch gate, and a shared brand profile.",
