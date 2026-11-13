@@ -1,6 +1,9 @@
-# Marketing Automation Plugins
+# Сlaude Marketing Skills & Content Skills: SE Ranking x Planable
 
 Official plugin marketplace from [SE Ranking](https://seranking.com) and [Planable](https://planable.io) for marketing automation agents.
+
+- [Claude Marketing Skills](https://seranking.com/claude-marketing-skills.html): 23 skills for SEO, AI Search, paid ads, and social.
+- [Claude Content Skills](https://seranking.com/claude-content-skills.html): 10 skills for briefs, editorial plans, refreshes and social packs.
 
 | Plugin | Skills | Best for |
 | --- | --- | --- |
@@ -118,13 +121,19 @@ marketing-automation-plugins/
 
 Skills and MCP configs are shared; only the `.*-plugin` manifests differ per agent host.
 
-## Learn more
+## Links
 
-- [Content Skills for Claude](https://seranking.com/claude-content-skills.html)
-- [Marketing Skills for Claude](https://seranking.com/claude-marketing-skills.html)
-- [Ecosystem Skills](plugins/ecosystem-skills/README.md) — the joint SE Ranking + Planable use cases
-- [Content Refresh](plugins/content-refresh/README.md) — audit → approve → refreshed drafts
-- Full SEO toolkit (separate repo): [`seranking/seo-skills`](https://github.com/seranking/seo-skills)
+- SE Ranking: https://seranking.com
+- SE Ranking API: https://seranking.com/api.html
+- SE Ranking MCP: https://seranking.com/mcp.html
+- SE Ranking MCP Docs: https://seranking.com/api/integrations/mcp/
+- Planable MCP: https://planable.io/mcp/
+- Planable MCP Docs: https://help.planable.io/hc/en-us/articles/27538577098780-How-to-connect-Planable-MCP-to-your-AI-tools
+- Claude SEO Skills: https://seranking.com/claude-seo-skills.html
+- Claude Marketing Skills:
+- Claude Content Skills: 
+- Claude Agent Skills: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+- Claude Code Plugins: https://code.claude.com/docs/en/plugins
 
 ## License
 
