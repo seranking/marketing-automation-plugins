@@ -294,7 +294,7 @@ Plus flag anything else that affects confidence: small sample size, one platform
 
 ### HTML visual report
 
-After delivering the in-chat text analysis, generate a self-contained HTML file saved to the working folder as `[client]-content-patterns-[month].html` and share it with the user.
+After delivering the in-chat text analysis, generate a self-contained HTML file saved to the working folder as `[client]-content-ideas-[month].html` and share it with the user.
 
 The HTML report is the visual companion to the text output — same structure, same data, but charts replace walls of text. Design it to be shareable with a client or team lead.
 
@@ -380,7 +380,7 @@ Three action cards in a row. Each card:
 - "Test in your next batch →" as a subtle footer label
 
 **9. Footer**
-"Generated with Planable + Claude · [date]"
+"Generated with Planable + SE Ranking data · [date]"
 
 ---
 
@@ -457,4 +457,4 @@ Patterns tell you what resonates with the existing audience; this phase proves w
 
 ## Final output (extends the pattern report)
 
-**CONTENT-IDEAS.md**: the pattern summary from Phase 1, then a Validation table (topic, social evidence, search volume, KD, classification), then the mini content plan — 3–5 pieces ready to hand to `content-campaign-brief` for full briefing.
+**CONTENT-IDEAS.md** (alongside the HTML report above): the pattern summary from the main process above, then a Validation table (topic, social evidence, search volume, KD, classification), then the mini content plan — 3–5 pieces ready to hand to `content-campaign-brief` for full briefing.

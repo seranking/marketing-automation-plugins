@@ -2,7 +2,7 @@
 
 > **Sept-2025 QRG generalisation.** Updated for the September 2025 Quality Rater Guidelines and December 2025 core update — E-E-A-T applies broadly, not only to YMYL topics. The dimension definitions below, the 4 vetoes, and the AI-content-markers checklist are framed as defaults across all topics; the YMYL-specific calibrations are called out where they differ.
 
-15 items per dimension × 4 dimensions = 60 total. Score each: ✓ (full credit), ~ (partial), ✗ (fail). Dimension score = ✓ ÷ 15 × 100%. E-E-A-T composite = average of dimension scores.
+15 items per dimension × 4 dimensions = 60 total. Score each: ✓ (1), ~ (0.5), ✗ (0). Dimension score = sum ÷ 15 × 100%. E-E-A-T composite = average of dimension scores.
 
 ## Veto items (any one triggers automatic NO PUBLISH)
 
@@ -67,7 +67,7 @@ Reputation of the author and publishing entity in the topic domain.
 8. Domain age and consistency (publishing in this topic for years, not weeks).
 9. Other articles by this author cluster around the same topic (topical authority).
 10. Internal links from cornerstone content on this site point to this piece (it's part of a hub).
-11. External backlinks to this piece from authoritative sites (assess via `seo-backlink-gap` or `seo-backlinks-profile`).
+11. External backlinks to this piece from authoritative sites (assess via `DATA_getBacklinksSummary`).
 12. The publisher is a recognised authority for its topic per industry consensus (not just self-description).
 13. Press release / news coverage of the publisher's research or position on this topic.
 14. Citations from peer publications to the publisher's previous work.
@@ -106,7 +106,7 @@ A 2025-09 Search Quality Rater Guidelines update made "low-effort AI-generated c
 5. **Hallucinated or unverifiable citations.** Inline citations exist but the linked source doesn't contain the cited claim, or the URL 404s, or the cited "study" can't be located via Google Scholar / publisher's site. Detection: spot-check 3 random inline citations; **≥1 of 3 fails verification = fired**.
 6. **AI-shaped author byline.** Byline reads "Editorial Team", "Staff Writer", "{SiteName} Team" with no linked profile; OR the byline links to a profile page with no other articles, no LinkedIn, no real-world footprint. Detection: click the byline; check for a real bio with linked social or LinkedIn profile; **generic-team byline OR ghost profile = fired**.
 7. **No "reviewed by" or "fact-checked on" credit.** Especially for YMYL topics, absence of any human-accountability surface is itself a signal — combined with markers 1–6, suggests AI-only authorship. Detection: search the page for "reviewed by", "fact-checked", "medically reviewed", "edited by", "last reviewed"; **none found = fired**.
-8. **Suspiciously round publishing cadence.** Same site shipped 20+ pieces on different topics in a week with no obvious editorial arc, or a brand-new domain published 50+ articles in its first month. Use `site:domain.com` search or `seo-content-brief`-style topic clustering on the domain to corroborate. Detection: list the most recent 30 published-date timestamps on the domain; **≥20 articles within a 7-day span across unrelated topics = fired**.
+8. **Suspiciously round publishing cadence.** Same site shipped 20+ pieces on different topics in a week with no obvious editorial arc, or a brand-new domain published 50+ articles in its first month. Use `site:domain.com` search or a topic clustering on the domain to corroborate. Detection: list the most recent 30 published-date timestamps on the domain; **≥20 articles within a 7-day span across unrelated topics = fired**.
 
 **Counting rule:** mark each marker as fired (1) or not-fired (0); record the evidence inline. **≥4 fired = AI-content suspected.** Combine with veto #4's YMYL + missing-human-review check before triggering the veto.
 

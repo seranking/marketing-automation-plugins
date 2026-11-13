@@ -406,7 +406,7 @@ Three action cards in a row. Each card:
 - "Test in your next batch →" as a subtle footer label
 
 **9. Footer**
-"Generated with Planable + Claude · [date]"
+"Generated with Planable + SE Ranking data · [date]"
 
 ---
 

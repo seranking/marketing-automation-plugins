@@ -3,7 +3,7 @@ name: marketing-report
 description: >
   Generate one unified performance report that brings together SEO rankings, AI-search visibility
   (SE Ranking) and social engagement (Planable) — delivered as a short text summary in chat plus a
-  self-contained interactive HTML report built from the bundled template, including a per-campaign
+  single-file interactive HTML report built from the bundled template, including a per-campaign
   section for every `mkt:*` campaign found in the workspace. Use this skill whenever the user wants a
   combined cross-channel report, or says things like "give me a full report across SEO and social",
   "how did we do this month across search and social", "combined SEO + AI + social report for [client]",
@@ -42,10 +42,10 @@ Confirm domain, Planable workspace, period, and competitors. Resolve the period 
 ### 2. Pull SEO (SE Ranking)
 - **With a project:** `PROJECT_getSummary` and `PROJECT_getPositionHistory(site_id, type: avg_pos | visibility, date_from, date_to)` for the ranking trend; optionally reuse a finished audit (`PROJECT_listAudits` → `getAuditReport`) for a site-health number.
 - **Without a project:** `DATA_getDomainOverviewWorldwide` for the snapshot.
-- **Shortcut:** the AI overview call in step 3 (time-series view) already returns monthly `organic_traffic` / `overall_traffic` streams for the chosen country — you can reuse those for the organic-trend chart instead of a separate history call.
+- **Trend:** `DATA_getDomainOverviewHistory(domain, source)` for the monthly organic-traffic series behind the organic-trend chart. The AI overview call in step 3 does not return traffic streams.
 
 ### 3. Pull AI search (SE Ranking)
-- `DATA_getAiSearchOverview(target, source, brand?)` with the default time-series view — brand presence, link presence, AI opportunity traffic, average position, plus monthly trend streams (including organic/overall traffic). If `previous` is `null`, treat it as a baseline — don't render the `change_percent` of 100 as growth.
+- `DATA_getAiSearchOverview(target, source, brand?)` — brand presence, link presence and AI opportunity traffic, each with its change against the previous monthly snapshot. It returns no trend series, and `average_position` is always null, so there is no AI trend line to chart from it: show current vs previous, and leave the AI series out of the dual-axis chart unless the AI Result Tracker (`PROJECT_getLlmStatistics`) or earlier reports supply real history. If `previous` is `null`, treat it as a baseline — don't render the `change_percent` of 100 as growth.
 - `DATA_getAiSearchLeaderboard(primary, competitors[], source, engines[])` — share of voice vs competitors (only if competitors were provided). Query it narrowly (few engines/competitors per call) — it can time out on large requests.
 
 ### 4. Pull social (Planable)
@@ -58,17 +58,18 @@ Confirm domain, Planable workspace, period, and competitors. Resolve the period 
 
 ### 4b. Pull campaigns (signature section)
 - `list_labels(workspaceId)` — find labels matching `mkt:*`. For each: `list_posts` filtered by the label to get the campaign's posts in (or overlapping) the period, then post-level metrics for those posts.
-- If a `Campaign passport: mkt:<slug>` post exists on a Universal content page, read it for the campaign's goal, launch date and baseline numbers — quote the baseline next to the current numbers.
+- If a `Campaign passport: mkt:<slug>` post exists on a Universal content page (or a `campaign-passport-<slug>.md` file sits in the working folder), read it for whatever it records — goal, launch date, baseline numbers — and quote the baseline next to the current numbers. Passports vary by campaign type; leave a missing field blank.
+- Card status: `launching` while the campaign's posts are still drafts, `live` once posts are published. The working / not yet / rework verdict belongs to `marketing-campaign-impact` — don't assign one here.
 - Report per campaign: posts shipped, engagement earned, and (when the passport lists tracked terms/prompts) the movement of those terms since launch. No `mkt:*` labels → skip the section silently.
 
 ### 5. Write the quick conclusions (chat)
 A ~10–15 line plain-text summary: the headline move in each of the three areas (SEO, AI search, social), then 2–3 specific callouts ("what moved", "what to watch"). This is the part most people actually read — make it sharp and number-led, no filler.
 
 ### 6. Build the interactive HTML report
-Use the bundled template at `assets/report-template.html` as the starting point — it has the Planable colour palette, the card/section layout, and Chart.js (CDN) wired up, including a **dual-axis** trend chart. Populate it with the **real data** you pulled:
+Use the bundled template at `assets/report-template.html` as the starting point — it has the colour palette, the card/section layout, and Chart.js (CDN) wired up, including a **dual-axis** trend chart. Populate it with the **real data** you pulled:
 
 - **KPI cards:** organic traffic, AI presence / share of voice, social impressions, engagement rate, posts — each with a real period-over-period change where you have one (leave the delta blank otherwise; never invent it).
-- **Trend charts (interactive):** ranking/organic trend, AI presence trend, social impressions & engagement. **When two series have very different scales** (e.g. organic traffic in the thousands vs AI opportunity traffic in the hundreds, or impressions vs engagement), plot them on a **dual axis** or in separate charts — don't squash them onto one axis or the smaller line flatlines.
+- **Trend charts (interactive):** ranking/organic trend, social impressions & engagement. AI presence is shown as current vs previous snapshot, not a trend line — set the template's `AI_SERIES_JSON` to `[]` and remove that dataset unless real monthly AI history exists. **When two series have very different scales** (e.g. organic traffic in the thousands vs AI opportunity traffic in the hundreds, or impressions vs engagement), plot them on a **dual axis** or in separate charts — don't squash them onto one axis or the smaller line flatlines.
 - **Share of voice:** a bar chart of brand vs competitors (omit if no competitors).
 - **Campaigns:** one card per `mkt:*` campaign — posts, engagement, tracked-term movement, baseline→current where a passport exists (omit the section if no campaigns).
 - **Top posts** and **What moved / What to watch** — same callouts as the text summary.
@@ -78,7 +79,7 @@ Inline the data as JavaScript arrays in the file (no external data files, no `lo
 ## Output
 
 1. **Quick conclusions** — short text summary in chat (the numbers + 2–3 callouts).
-2. **Interactive HTML report** — self-contained file saved to the working folder and shared with the user, with KPI cards, hoverable trend charts, share-of-voice, and top posts.
+2. **Interactive HTML report** — one HTML file (it loads Chart.js from a CDN, so the charts need a connection) saved to the working folder and shared with the user, with KPI cards, hoverable trend charts, share-of-voice, and top posts.
 
 ## Tips
 

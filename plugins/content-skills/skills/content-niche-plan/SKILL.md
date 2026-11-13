@@ -2,7 +2,7 @@
 name: content-niche-plan
 description: Mine longtail and question keywords for a topic, then validate every niche opportunity against social demand before committing. Each candidate gets search evidence from SE Ranking and engagement evidence from social data (Planable when connected), producing a content-tier plan with template spec, URL pattern, sample pages, quality gates, and a two-channel demand verdict per candidate (build now / experiment / skip). Use whenever the user wants niche or programmatic content opportunities they can trust — "longtail keywords worth writing", "niche content plan", "validated content opportunities", "programmatic SEO plan", "what should we write about at scale". Requires the SE Ranking MCP; the Planable MCP is optional for social validation. For raw longtail mining without validation, use seo-keyword-niche from seranking/seo-skills instead.
 ---
-> Example output: [examples/seo-keyword-niche-espresso-machine-reviews-20260514/KEYWORD-NICHE-PLAN.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-keyword-niche-espresso-machine-reviews-20260514/KEYWORD-NICHE-PLAN.md) (hosted in the seranking/seo-skills repo)
+> Example of the niche-plan part (from the seo-skills counterpart of this skill; this skill's own deliverable adds the Phase 2 sections and uses its own filename): [examples/seo-keyword-niche-espresso-machine-reviews-20260514/KEYWORD-NICHE-PLAN.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-keyword-niche-espresso-machine-reviews-20260514/KEYWORD-NICHE-PLAN.md) (hosted in the seranking/seo-skills repo)
 
 # Content Niche Plan
 
@@ -38,7 +38,8 @@ Mine the long tail for content opportunities. Pulls longtail variants, question-
    - De-duplicate across seeds.
 
 6. **SERP sample for representative keywords** `DATA_getSerpResults`
-   - For 5–10 representative keywords (one per emerging cluster), pull top 10.
+   - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
+   - For 5–10 representative keywords (one per emerging cluster), pull top 10. Pass `language_code` (required) plus `country_code`; the standard result type is enough here.
    - Identify the dominant page type for each cluster (informs the template proposal in step 8).
 
 7. **Cluster by intent + theme**
@@ -95,7 +96,7 @@ Top-level: `NICHE-PLAN.md` + `keywords.csv` + `06-template-spec.md` + `07-qualit
 `NICHE-PLAN.md` shape:
 
 ```markdown
-# Keyword Niche Plan: {topic}
+# Niche Plan: {topic}
 
 > Generated {YYYY-MM-DD} · Country: {country} · Seeds: {list}
 
@@ -154,9 +155,9 @@ Top-level: `NICHE-PLAN.md` + `keywords.csv` + `06-template-spec.md` + `07-qualit
 - Crawl-budget impact (for sites > 10k pages): noindex strategy keeps thin variants out of the index.
 
 ## Risks / monitoring
-- **Thin-content penalty:** the quality gates above are the guardrail. Audit at scale via `seo-technical-audit` (from seranking/seo-skills) after the first 100 pages ship.
+- **Thin-content penalty:** the quality gates above are the guardrail. Audit at scale via `seo-technical-audit` (from seranking/seo-skills, if installed) after the first 100 pages ship.
 - **Index bloat:** monitor in GSC; if newly indexed pages don't accrue impressions in 60 days, candidate for noindex/consolidate.
-- **Cannibalization:** monitor with `seo-subdomain` + `seo-page` (from seranking/seo-skills) after the first 50 pages.
+- **Cannibalization:** monitor with `seo-subdomain` + `seo-page` (from seranking/seo-skills, if installed) after the first 50 pages.
 
 ## Recommended next step
 Build a small pilot — 10 pages from the top cluster — before committing to the full tier. Apply quality gates rigorously to the pilot. Re-audit after 60 days; iterate the template based on which pilot pages indexed and ranked.
@@ -174,7 +175,7 @@ Build a small pilot — 10 pages from the top cluster — before committing to t
 - For "best X for Y" content (where Y has many variants), pick variants that have genuinely distinct content — don't templatise across near-synonyms.
 - Pair with `content-editorial-plan` for the broader pillar+spoke architecture and calendar (this skill complements, not replaces).
 - Pair with `content-campaign-brief` to expand individual pillar topics into full campaign briefs.
-- Pair with `seo-technical-audit` (from seranking/seo-skills) after the first 100 pages ship to catch any thin-content / canonicalization issues.
+- Pair with `seo-technical-audit` (from seranking/seo-skills, if installed) after the first 100 pages ship to catch any thin-content / canonicalization issues.
 - Don't auto-publish. The template, URL pattern, and quality gates ship from this skill; the content authoring + review remains a human responsibility.
 
 ---
@@ -189,8 +190,8 @@ Longtail plans fail when nobody actually cares — and search volume alone can't
 
 1. Take the top 10–15 candidate questions/topics from the tier plan above.
 2. If the Planable MCP is connected, check the workspace's post history and competitor top posts for these themes: which ones already earn engagement? Mark each candidate's social evidence: strong / weak / none. If Planable is not connected, ask the user what they know about audience interest and mark candidates accordingly.
-3. Give each candidate a two-channel verdict: search evidence (volume/intent from Phase 1) + social evidence → **build now** (both channels), **experiment** (search-only), **skip** (no evidence anywhere). Fewer, validated pages beat a large unvalidated tier — especially given the programmatic-publishing quality gates above.
+3. Give each candidate a two-channel verdict: search evidence (volume/intent from the main process above) + social evidence → **build now** (both channels), **experiment** (search-only), **skip** (no evidence anywhere). Fewer, validated pages beat a large unvalidated tier — especially given the programmatic-publishing quality gates above.
 
 ## Final output (replaces the standalone niche plan)
 
-**NICHE-PLAN.md**: the Phase 1 content-tier plan, then a Validation table (candidate, search evidence, social evidence, verdict), then the first-wave build list containing only the "build now" candidates.
+**NICHE-PLAN.md**: the content-tier plan from the main process above, then a Validation table (candidate, search evidence, social evidence, verdict), then the first-wave build list containing only the "build now" candidates.

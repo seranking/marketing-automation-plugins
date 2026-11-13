@@ -29,14 +29,15 @@ Only continue to the process steps below once both calls return a successful res
 ### 1. Get the audit — reuse before you crawl
 A full crawl is slow and consumes plan crawl budget, so **check for an existing audit first**:
 - `PROJECT_listAudits` (or `DATA_listAudits`) — if a recent **finished** audit exists for the domain, reuse it; read it with `PROJECT_getAuditReport` / `DATA_getAuditReport(audit_id)`. Note the audit date and tell the user how fresh it is — offer to re-run if it's stale (more than a month or two old).
-- Only if none exists (or the user wants fresh data): `PROJECT_createAudit(domain, settings?)` → poll readiness → `getAuditReport`. Without a project, use `DATA_createStandardAudit` (or `createAdvancedAudit`). Scope `max_pages` sensibly for large sites.
+- Only if none exists (or the user wants fresh data), **ask before creating one** — a crawl consumes the plan's audit budget, so state the page cap you would use and wait for a yes. Then: `PROJECT_createAudit(domain, settings?)` → poll readiness → `getAuditReport`. Without a project, use `DATA_createStandardAudit` (or `createAdvancedAudit`). Scope `max_pages` sensibly for large sites.
 
 Then list the specific pages behind each issue with `DATA_getAuditPagesByIssue` / `getIssuesByUrl`. Focus on issues that move rankings and map to page copy: duplicate/missing titles & descriptions, missing H1s, thin content, plus technical flags (broken links, indexability, redirects).
 
 ### 2. Add competitive + demand context
 For the pages worth fixing, understand what "good" looks like:
 - `DATA_getDomainCompetitors` + `DATA_getDomainKeywordsComparison` — what competitors rank for on these topics that this page doesn't (discard off-brand/junk gap terms — see content-gap-sprint's junk-filter note).
-- `DATA_getSerpResults` for the page's target query — the dominant content format and SERP features to match.
+- `DATA_getSerpResults` for the page's target query — the dominant content format and SERP features to match. Pass `language_code` (required) plus `country_code`. Standard results return organic, ads and featured-snippet items (the summary names any other features present, without their content); add `result_type: advanced` (≈10 credits per query) when AI Overview / PAA / pack presence matters.
+  - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
 - `DATA_getRelatedKeywords` + `DATA_getKeywordQuestions` — subtopics and questions the rewrite should cover (query a few seeds; each returns only a handful).
 
 ### 3. Prioritise
@@ -45,17 +46,17 @@ Build a ranked fix list: **page URL → issue(s) → opportunity (target query, 
 ### 4. Draft the rewritten copy in a Universal content page (the review surface)
 For each agreed page, write the improved copy (title, meta description, H1/H2 outline, and body or detailed section guidance grounded in steps 1–2). Create it in Planable on the **Universal content page**:
 
-`create_post(workspaceId, universalPageId, text)` — put the live page URL in the body so reviewers know which page it maps to.
+Show the rewritten copy in chat first; once the user is happy with it, `create_post(workspaceId, universalPageId, text)` — put the live page URL in the body so reviewers know which page it maps to.
 
-This gives the team a real review object:
+This gives the team a real review object. Add comments or apply revisions when the user asks for them:
 - `create_comment(workspaceId, postId, text)` for feedback and questions (`teamOnly: true` for internal notes).
 - `update_post(workspaceId, postId, text)` to apply revisions in place.
-- `approve_post(workspaceId, postId)` for sign-off.
+- `approve_post(workspaceId, postId)` for sign-off — approval belongs to the user or their stakeholders; call it only when the user explicitly tells you to approve a specific post, never on your own judgement.
 
 **Keep the page-copy drafts separate from the social posts** — `create_grouped_post` splits universal and non-universal pages into different sub-groups, so don't try to sync website copy and social captions in one grouped post.
 
 ### 5. Schedule the social distribution layer
-For each approved page refresh, draft social posts that announce or support it — `create_post` per platform or `create_grouped_post` for synced copy across social pages (remember a grouped post shares one text, so mind the strictest platform's length). Tie them to the same campaign with a label (e.g. "content-refresh"); note labels are per-workspace, so if social lives in a different workspace than the Universal page, create the label there too. 
+Run the Phase 2 relaunch gate on the approved copy first. Then, for each approved page refresh, draft social posts that announce or support it — `create_post` per platform or `create_grouped_post` for synced copy across social pages (remember a grouped post shares one text, so mind the strictest platform's length). Show the user the full draft copy and get a go-ahead before creating anything in Planable. Tie them to the same campaign with a label (e.g. "content-refresh"); note labels are per-workspace, so if social lives in a different workspace than the Universal page, create the label there too. 
 
 **Scheduling — ask before creating.** Don't guess dates or leave everything undated by default. Ask how the user wants the batch dated and offer: **spread evenly** across a window (e.g. the next 7 days, one post per slot at a sensible hour), a **fixed cadence/interval** (e.g. every weekday at 10:00, laid out from a start date they give), **manual** dates per post, or **no dates yet** (undated drafts to place on the calendar later). Convert each chosen time to ISO 8601 and pass it as `scheduledAt`. Keep posts as **proposed drafts** — don't set `publishAtScheduledDate` — so nothing auto-publishes; only set it `true` if the user explicitly wants auto-publishing. Scheduled times are treated as **UTC**, so confirm the timezone or state that times are UTC.
 
@@ -102,12 +103,12 @@ Keep these in mind when writing the page-rewrite copy and the supporting social 
 
 If `brand-profile.md` exists in the working folder (created by `content-brand-setup`), read it before writing anything and apply its voice, banned words, audience notes, and CTA conventions to every rewrite and draft this skill produces. If it doesn't exist, proceed with a neutral professional tone and suggest running `content-brand-setup` once at the end.
 
-## Phase 2: Relaunch quality gate (before anything goes live)
+## Phase 2: Relaunch quality gate (run between steps 4 and 5, before the publish hand-off)
 
 A rewritten page that fails basic quality checks just decays again — the gate exists so the team fixes a page once, not annually.
 
 1. **Relaunch checklist** on the stakeholder-approved copy from the Planable Universal page. Verify: a direct answer to the page's core query in the first 300 words; datestamped, sourced stats; clear author/brand entity; question-mirroring headings; no unsupported superlatives; 2–3 working internal links to relevant pages. Any failure → return the copy with a short fix note before relaunch, not after.
-2. **Internal-link refresh.** Update links pointing TO the recovered page from related pages on the site (list candidates from site data), so the relaunch gets crawl and authority signals instead of relying on the page alone.
+2. **Internal-link refresh.** List the related pages that should link TO the recovered page (candidates from site data) and the anchor text to use — the site owner makes the edits, this skill cannot change site pages — so the relaunch gets crawl and authority signals instead of relying on the page alone.
 3. **Post-fix measurement.** Record the pre-fix baseline (rankings, organic traffic, AI citations if tracked) and set a 6–8-week re-check. If the page hasn't recovered by then, escalate to a deeper rewrite or consolidation decision rather than repeating the same fix.
 
 ## Final output (extends the fix + distribution plan)

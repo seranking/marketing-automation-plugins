@@ -30,26 +30,28 @@ Diagnose why a "well-optimized" page doesn't rank. Reads the actual SERP for the
 
 1. **Validate inputs.** Both URL and keyword are required. If keyword missing, ask the user — don't infer.
 
-2. **Pull the SERP** `DATA_getSerpResults` and `DATA_getSerpTaskAdvancedResults`
+2. **Pull the SERP** `DATA_getSerpResults(query[], language_code, country_code, result_type)` — `language_code` is required
+   - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
    - Top 10 organic results with URL, title, snippet.
    - SERP features: AI Overview presence, People Also Ask, image carousel, video carousel, shopping pack, Twitter pack, Featured Snippet, etc.
-   - **Mode selection (cost driver — read this).** SERP feature data (AIO/PAA/carousels) only comes back when the task runs with `result_type=advanced`. That is also the most expensive single call this skill makes (≈ 700 credits per keyword on heavily-trafficked terms in the 2026-04 validation run).
-     - **Default — `mode=full`:** runs `result_type=advanced`. Returns features + organic. Use when persona scoring needs PAA / AIO / pack signals (most cases).
-     - **`mode=lite` (`result_type=standard`):** organic top-10 only, no SERP features, ≈ 50–100 credits. Use when (a) the user is screening many keywords and SERP features aren't load-bearing, (b) credits are constrained, (c) the user explicitly asks for a cheap pass. The persona scoring still runs but the SERP-features row in `SXO-REPORT.md` will read `(skipped — lite mode)` and the dominant-pattern detection will rely on URL/title heuristics alone.
-     - Surface the chosen mode + estimated cost up front. If the user didn't specify and the keyword looks ad-heavy or commercial-high-volume, recommend `mode=lite` first and re-run with `mode=full` only if dominant-pattern confidence is low.
+   - **Mode selection (cost driver — read this).** SERP feature data (AIO/PAA/carousels) only comes back when the task runs with `result_type=advanced`. That is the most expensive single call this skill makes: ≈10 units per keyword (measured on a live run; the tool schema also states 10).
+     - **Default — full mode:** runs `result_type=advanced`. Returns features + organic. Use when persona scoring needs PAA / AIO / pack signals (most cases).
+     - **Lite mode (`result_type=standard`):** organic, ads and featured-snippet items; other SERP features are only named in the summary, without content. Cheaper than advanced. Use when (a) the user is screening many keywords and SERP features aren't load-bearing, (b) credits are constrained, (c) the user explicitly asks for a cheap pass. The persona scoring still runs but the SERP-features row in `SXO-REPORT.md` will read `(skipped — lite mode)` and the dominant-pattern detection will rely on URL/title heuristics alone.
+     - Surface the chosen mode + estimated cost up front. If the user didn't specify and the keyword looks ad-heavy or commercial-high-volume, recommend lite mode first and re-run in full mode only if dominant-pattern confidence is low.
 
-3. **Pull AIO context** `DATA_getAiSearchOverview`
-   - If AIO is present for the keyword, capture the answer text and citation list.
+3. **Pull AIO context** from the step 2 SERP result
+   - In full mode the advanced SERP result carries the AI Overview item when one exists for the keyword: capture its answer text and the sources it cites.
+   - In lite mode there is no AIO data — mark the row `(skipped — lite mode)`. Don't use `DATA_getAiSearchOverview` here: it is domain-level (how often AI answers cite a whole site) and takes no keyword.
    - Note which top-10 organic results are also cited in the AIO.
 
-4. **Fetch user's page + top 3 winners** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+4. **Fetch user's page + top 3 winners** `WebFetch` (always) + the Firecrawl MCP's `firecrawl_scrape` (when available)
    - **WebFetch first** (free): pull markdown for the user's page + top 3 winners. Extract `<title>`, all H-tags, primary content structure (numbered list / table / prose / Q&A), word count, image mentions, comparison-table presence, CTA mentions.
    - **Firecrawl second** (4 Firecrawl credits typical — 1 per page) — recovers what WebFetch can't show:
      - JSON-LD `@type`s per page (Product, FAQPage, BreadcrumbList, Article, Review, ItemList, etc.) — these are **load-bearing** for page-type classification in step 5. WebFetch's markdown can't see schema.
      - `og:title` / `og:image` / `twitter:card` from `metadata`.
      - Real `<title>` length (the markdown first-heading is sometimes wrong).
-   - **`--screenshots` flag (opt-in, +4 Firecrawl credits):** when passed, also call `firecrawl_scrape` with `formats: ["screenshot"]` on the user's page + top 3 winners. Save as `screenshots/{page}.png`. Reference in the wireframe (step 8) to ground recommendations in the visual layout, not just the text outline.
-   - **If Firecrawl unavailable (or `--no-firecrawl` passed):** WebFetch portion runs. Page-type classification in step 5 falls back to URL/title heuristics + content-structure heuristics only — schema-based classification is skipped. Note in `02-page-type-classification.md`: `Schema-based classification: skipped — Firecrawl required.` Confidence in dominant-pattern detection drops accordingly.
+   - **Screenshots (opt-in, +4 Firecrawl credits):** when the user asks for them, also call `firecrawl_scrape` with `formats: ["screenshot"]` on the user's page + top 3 winners. Save as `screenshots/{page}.png`. Reference in the wireframe (step 8) to ground recommendations in the visual layout, not just the text outline.
+   - **If Firecrawl unavailable (or the user asked to skip it):** WebFetch portion runs. Page-type classification in step 5 falls back to URL/title heuristics + content-structure heuristics only — schema-based classification is skipped. Note in `02-page-type-classification.md`: `Schema-based classification: skipped — Firecrawl required.` Confidence in dominant-pattern detection drops accordingly.
 
 5. **Classify each top-10 result by page type**
    - Use the heuristics in `references/page-type-patterns.md`.
@@ -64,7 +66,7 @@ Diagnose why a "well-optimized" page doesn't rank. Reads the actual SERP for the
 7. **Score the user's page** against the dominant pattern × 4 personas
    - Use the rubrics in `references/persona-rubrics.md`.
    - 4 personas: Skimmer, Researcher, Buyer, Validator.
-   - 0–10 per persona. Apply the intent-weighting profile (also in persona-rubrics.md) to get a single 0–100 SXO score.
+   - 0–10 per persona. Apply the intent-weighting profile (also in persona-rubrics.md) and multiply the weighted sum by 10 to get a single 0–100 SXO score.
 
 7b. **Audience-signal check (signature step)** — Planable
    - Pull the brand's top posts for the last ~90 days: `list_pages(workspaceId)` → `get_post_metrics` (one page per call, `limit` ~20).
@@ -89,7 +91,7 @@ marketing-serp-fit-{target-slug}-{YYYYMMDD}/
 ├── 04-persona-scores.md           (4 personas × current page)
 ├── 05-recommendation.md           (verdict + page-type-winning wireframe)
 ├── 06-audience-signals.md         (top posts × recommended elements — the audience verdicts)
-├── screenshots/                   (only if --screenshots ran: candidate.png + winner-1/2/3.png)
+├── screenshots/                   (only if screenshots were requested: candidate.png + winner-1/2/3.png)
 └── SXO-REPORT.md                  (executive summary deliverable)
 ```
 
@@ -159,8 +161,8 @@ marketing-serp-fit-{target-slug}-{YYYYMMDD}/
 ## Tips
 
 - Respect rate limit: 10 req/sec. The SERP calls in step 2/3 are fast; WebFetch calls in step 4 dominate latency, not API.
-- **Cost is mode-dependent.** `mode=full` is ~750–900 SE Ranking credits per run (the SERP-advanced call dominates). `mode=lite` is ~80–150 SE Ranking credits. Always check `DATA_getSubscription` before running and surface the estimate against remaining units. Step 4 adds 4 Firecrawl credits when Firecrawl is available, +4 more if `--screenshots` is passed. Pass `--no-firecrawl` to skip both.
-- **`result_type=advanced` is the only way to get AIO / PAA / pack data.** The standard SERP endpoint returns organic-only. Don't try to reconstruct SERP features from organic results — that's the cost the user is paying for.
+- **Cost is mode-dependent.** The advanced SERP call is ≈10 units per keyword; the rest of the run is ordinary Data API calls. To quote a total, read `DATA_getSubscription` before and after the first run and use the difference. Always check `DATA_getSubscription` before running and surface the estimate against remaining units. Step 4 adds 4 Firecrawl credits when Firecrawl is available, +4 more if screenshots are requested. Skip both if the user asks.
+- **`result_type=advanced` is the only way to get AIO / PAA / pack data.** The standard result returns organic, ads and featured-snippet items; other features are only named in its summary. Don't try to reconstruct SERP features from organic results — that's the cost the user is paying for.
 - Page-type classification is a heuristic — `references/page-type-patterns.md` documents the signals so users can override. If the heuristic gets a result wrong, edit that file with the correction.
 - The 4 personas are opinionated. They come from the framework's original source — don't invent more without good reason.
 - The SXO score is directional. An 85/100 doesn't guarantee ranking; a 35/100 strongly suggests the page won't break through. Treat as a diagnostic, not a forecast.
