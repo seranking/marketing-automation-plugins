@@ -53,8 +53,9 @@ Produce a production-ready landing page for an SEO agency offering a free audit 
 7. **Lead-gen distribution (signature step)**
    - Draft 3–5 posts that drive to the landing page, each built from a real asset of the page: one per pain point (the niche numbers from step 1 make the hooks), one "what the free audit covers" post, one proof/case post. Platform-adapt the copy.
    - Append UTM parameters to every landing-page link (`?utm_source={platform}&utm_medium=social&utm_campaign=leadgen-{slug}`) so form submissions are attributable.
-   - Create the drafts in the agency's Planable workspace (`create_post` per platform), label the batch `mkt:leadgen-<slug>` (`list_labels` / `create_label`).
+   - Show the drafts to the user and confirm the workspace and pages; after a go-ahead, create them in the agency's Planable workspace (`create_post` per platform) and label the batch `mkt:leadgen-<slug>` (`list_labels` / `create_label`).
    - **Scheduling — ask:** spread across 2 weeks, fixed cadence, or undated. Drafts only — never set `publishAtScheduledDate`.
+   - To make the batch measurable, offer a compact campaign passport and write it on a yes — one post on a Universal content page titled `Campaign passport: mkt:leadgen-<slug>` (no Universal page → `campaign-passport-leadgen-<slug>.md` in the working folder) with goal, launch date, the landing-page URL and UTM campaign, workspace + pages. If the user declines, say that `marketing-campaign-impact` will only be able to report label-level engagement.
    - Later, `marketing-campaign-impact` reads the label's engagement while form submissions land in the agency's own analytics via the UTMs.
 
 ## Output format
@@ -65,7 +66,7 @@ Create a folder `marketing-agency-leadgen-{target-slug}-{YYYYMMDD}/` with:
 marketing-agency-leadgen-{target-slug}-{YYYYMMDD}/
 ├── 01-niche-data.md      # the real numbers pulled in step 1
 ├── 02-pain-points.md     # the 3 pains used in copy
-├── index.html            # self-contained HTML page (Tailwind via CDN)
+├── index.html            # single-file HTML page (Tailwind via CDN)
 ├── copy.md               # the copy alone, markdown, for CMS paste
 ├── 03-leadgen-posts.md   # the social batch: post → hook source → UTM link → Planable draft id
 └── README.md             # how to customise and deploy
@@ -140,7 +141,7 @@ Logo bar: {placeholder for 4-6 client logos}
 Spots left this month: {n}
 ```
 
-`index.html` is a self-contained page with:
+`index.html` is a single-file page (it loads Tailwind from a CDN, so it needs a connection to render styled) with:
 - Tailwind CSS via CDN (`https://cdn.tailwindcss.com`).
 - Semantic HTML, no JS frameworks.
 - A real HTML form POSTing to a configurable endpoint (placeholder `action="REPLACE_WITH_FORM_ENDPOINT"`).
@@ -161,6 +162,6 @@ Spots left this month: {n}
 - The page lives and dies by the hook. Specific numbers beat generalities. "You are losing 18% of top-funnel traffic to AI Overviews" beats "AI is changing SEO".
 - Do not promise what the agency cannot deliver. If the free audit is limited to the first 100 URLs, say so on the page.
 - Mobile-first. Hero fits on one iPhone screen.
-- The lead-magnet audit should itself be an automated workflow, not a promise — SE Ranking's audit API (see seo-skills' `seo-technical-audit` / `seo-api`) is the natural delivery mechanism.
+- The lead-magnet audit should itself be an automated workflow, not a promise — SE Ranking's audit API is the natural delivery mechanism.
 - Do not add stock photography. Real screenshots of actual audit outputs convert better.
 - If the agency has no case studies yet, use aggregate data (e.g., "Agencies like ours typically lift organic traffic by 40-80% in year one") with a clear disclaimer, not fake numbers.

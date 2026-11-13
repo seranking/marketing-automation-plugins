@@ -39,7 +39,7 @@ Only continue to the process steps below once both calls return a successful res
 ## Process
 
 ### 1. Scope the locations and terms
-Confirm the cities, the local keywords per city, the business domain, and the Planable workspace + which pages (GMB and/or social). For multi-location, list each location explicitly. **Rank tracking consumes plan quota** (keywords × search engines) and search engines persist in the project — confirm scope before creating many, and offer to remove test engines afterwards.
+Confirm the cities, the local keywords per city, the business domain, and the Planable workspace + which pages (GMB and/or social). For multi-location, list each location explicitly. **Rank tracking consumes plan quota** (keywords × search engines) and search engines persist in the project — before step 2 writes anything, show exactly what will be created (project or reused `site_id`, one search engine per city, the keyword list with its count, any competitors) and wait for an explicit yes. Offer to remove test engines afterwards.
 
 ### 2. Set up city-level rank tracking in SE Ranking
 - Create or reuse a project: `PROJECT_createProject(url, title)` → `site_id` (or reuse an existing project's `site_id`).
@@ -50,21 +50,23 @@ Confirm the cities, the local keywords per city, the business domain, and the Pl
 
 ### 3. Read local performance
 - `PROJECT_getPositionHistory(site_id, type, site_engine_id?, date_from, date_to)` — rankings over time, filterable to a single city engine. Use `avg_pos` and `visibility`.
-- `PROJECT_addCompetitor` + `PROJECT_getCompetitorPositions(competitor_id)` — how local competitors rank for the same terms.
-- For a live local SERP / local-pack read, `DATA_getSerpLocations` (to find the `location_id`) → `DATA_getSerpResults(location_id=...)`. **Heads-up: `getSerpLocations` can return a very large payload** (hundreds of thousands of characters for a broad query). Pass a specific `q` (e.g. "Brooklyn" or "New York, NY"), and if the result is still huge it's written to a file — extract the one matching `location_id` with `jq` rather than loading the whole thing. For tracking setup you usually only need `getAvailableRegions`, so reserve `getSerpLocations` for when a live SERP read is essential.
+- `PROJECT_getCompetitorPositions(competitor_id)` — how local competitors rank for the same terms. Competitors must already be in the project; `PROJECT_addCompetitor` is a write, so add one only if the user agreed to it in step 1.
+- For a live local SERP / local-pack read, `DATA_getSerpLocations` (to find the `location_id`) → `DATA_getSerpResults(query[], language_code, location_id=..., result_type: advanced)` (`language_code` is required; the local pack only comes back with the advanced result type). **Heads-up: `getSerpLocations` can return a very large payload** (hundreds of thousands of characters for a broad query). Pass a specific `q` (e.g. "Brooklyn" or "New York, NY"), and if the result is still huge it's written to a file — extract the one matching `location_id` with `jq` rather than loading the whole thing. For tracking setup you usually only need `getAvailableRegions`, so reserve `getSerpLocations` for when a live SERP read is essential.
+  - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
 - `DATA_getDomainKeywordsComparison` — local keyword gaps vs competitors.
 
 ### 4. Build the local content plan
 Translate the rankings + gaps into location-relevant content: service-area posts, local proof and reviews-style content (written as posts, since review data isn't pulled here), neighbourhood/landmark references, local offers, and answers to local intent. Tailor copy per city — generic content underperforms locally.
 
 ### 5. Create the content in Planable
+- Show the user the full draft copy and get a go-ahead before creating anything in Planable.
 - **Google Business Profile posts:** if a `googleMyBusiness` page exists, `create_post(workspaceId, gmbPageId, text, scheduledAt?)` on it.
 - **Local social posts:** `create_post` per page, or `create_grouped_post` for synced copy. For multi-location, use a label per city — `mkt:local-<city-slug>` (via `list_labels` / `create_label`) — so each location's content is filterable and measurable.
 - **Scheduling — ask before creating.** Don't guess dates or leave everything undated by default. Ask how the user wants the batch dated and offer: **spread evenly** across a window (e.g. the next 7 days, one post per slot at a sensible hour), a **fixed cadence/interval** (e.g. every weekday at 10:00, laid out from a start date they give), **manual** dates per post, or **no dates yet** (undated drafts to place on the calendar later). Convert each chosen time to ISO 8601 and pass it as `scheduledAt`. Keep posts as **proposed drafts** — don't set `publishAtScheduledDate` — so nothing auto-publishes; only set it `true` if the user explicitly wants auto-publishing. Scheduled times are treated as **UTC**, so confirm the timezone or state that times are UTC.
 
 ### 6. Campaign contract + iterate
-- **Passport:** one post on a Universal content page titled `Campaign passport: mkt:local-<city>` per city (or one combined passport for small setups; file fallback if no Universal page). Contents: the `site_id` and per-city `site_engine_id`s, tracked keywords, the starting positions (or "first check pending — populates on cycle"), the city labels, launch date, workspace + pages.
-- **Measure:** `marketing-campaign-impact` reads the passport, pulls `PROJECT_getPositionHistory` per city engine, and reads each city label's post engagement — per-city verdicts instead of a blended average. Recommend running it after the next 1–2 check cycles.
+- **Passport:** one post on a Universal content page titled `Campaign passport: mkt:local-<city-slug>` per city — always one per city label, so the measuring skills can match each by title (if there is no Universal page, save `campaign-passport-local-<city-slug>.md` in the working folder and tell the user where it is — the measuring skills look for that exact filename when there is no Universal page). Contents: goal, the `site_id` and per-city `site_engine_id`s, tracked keywords, the starting positions (or "first check pending — populates on cycle"), the city labels, launch date, workspace + pages.
+- **Measure:** `marketing-campaign-impact` reads the passport, pulls `PROJECT_getPositionHistory` per city engine, and reads each city label's post engagement (social pages only — GBP pages return no metrics) — per-city verdicts instead of a blended average. Recommend running it after the next 1–2 check cycles.
 - Adjust the content plan toward the cities/terms with the most headroom.
 
 ## Content pointers: writing for keywords & AI visibility gaps

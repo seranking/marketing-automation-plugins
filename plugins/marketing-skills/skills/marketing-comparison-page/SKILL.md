@@ -43,13 +43,14 @@ Produce conversion-tuned landing pages targeting comparative-intent keywords ("X
    - For the user's domain and each named competitor, pull top 100 organic keywords.
    - Identify: keywords each brand owns exclusively, keywords both rank for, gaps.
 
-4. **Pull comparative SERPs** `DATA_getSerpResults` and `DATA_getKeywordQuestions`
+4. **Pull comparative SERPs** `DATA_getSerpResults(query[], language_code, country_code)` and `DATA_getKeywordQuestions`
+   - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
    - For "X vs Y" / "alternatives to X" / "best X for Y" target keyword(s):
      - Top 10 organic results — who else ranks for this comparative keyword?
-     - PAA questions (these become FAQ section content).
+     - PAA questions (these become FAQ section content) — from `DATA_getKeywordQuestions`; PAA boxes themselves only come back with `result_type: advanced` (≈10 credits per query).
      - Featured snippet (if present, capture the answer pattern).
 
-5. **Fetch existing comparison pages** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+5. **Fetch existing comparison pages** `WebFetch` (always) + the Firecrawl MCP's `firecrawl_scrape` (when available)
    - **WebFetch first** (free): pull the top 3 SERP winners' markdown. Extract H2 outline, feature-matrix dimensions, verdict pattern, CTA placement.
    - **Firecrawl second** (3 Firecrawl credits — 1 per winner) — recovers what WebFetch markdown can't show:
      - Schema types from `<script type="application/ld+json">` blocks (`Product` ×N, `BreadcrumbList`, `FAQPage`, `Review`, `AggregateRating`).
@@ -58,11 +59,11 @@ Produce conversion-tuned landing pages targeting comparative-intent keywords ("X
    - **If Firecrawl unavailable:** WebFetch portion runs unchanged. The "schema types" line in `evidence/04-existing-pages-teardown.md` reads `(skipped — Firecrawl required for JSON-LD)`. Schema generation in step 8 falls back to a default `Product + BreadcrumbList + FAQPage` template instead of mirroring whatever the winners use.
    - This anchors the draft in observed-rewarded-pattern.
 
-5b. **Bulk competitor scrape** `mcp__firecrawl-mcp__firecrawl_scrape` (optional, opt-in)
-   - When user passes `--bulk-scrape <urls>` or supplies a list of competitor URLs to compare directly (beyond the SERP top-3), Firecrawl-scrape each URL.
+5b. **Bulk competitor scrape** the Firecrawl MCP's `firecrawl_scrape` (optional, opt-in)
+   - When the user supplies a list of competitor URLs to compare directly (beyond the SERP top-3), Firecrawl-scrape each URL.
    - For each URL, extract: `<title>`, `og:*`, `twitter:*`, JSON-LD `@type`s, hero-image presence, pricing-block detection (regex on prose for `$N/mo`, `€N/mo`, etc.), CTA count, comparison-table presence, free-tier-mention boolean.
-   - Output `competitor-elements.csv` — one row per competitor URL × these signals.
-   - Cost: 1 Firecrawl credit per URL. Surface estimate before running; refuse >50 URLs without `--confirm-cost`.
+   - Output `05b-competitor-elements.csv` — one row per competitor URL × these signals.
+   - Cost: 1 Firecrawl credit per URL. Surface estimate before running; for more than 50 URLs, stop and get an explicit yes first.
 
 6. **Pull keyword comparison data** `DATA_getDomainKeywordsComparison` (if available for the brands)
    - Side-by-side keyword overlap.
@@ -83,10 +84,10 @@ Produce conversion-tuned landing pages targeting comparative-intent keywords ("X
    - Schema-ready JSON-LD: `Product` (×N) + `BreadcrumbList` + `FAQPage` (if real Q&A).
 
 9. **Launch layer (signature step)**
-   - **Approval surface:** create the page copy as a post on the Planable **Universal content page** (`create_post(workspaceId, universalPageId, text)`), with the intended live URL in the body. Reviewers use `create_comment` (`teamOnly: true` for internal notes), revisions go in via `update_post`, sign-off via `approve_post` (needs a configured approval workflow; otherwise comments serve as sign-off — say which applies). Don't group the page copy with social posts — universal and social pages split into different sub-groups.
-   - **Supporting social series:** draft 3–5 posts from the page's strongest material — the verdict as a hot take, the feature matrix as a carousel outline, the top PAA answer as a question-hook post. Create them on the social pages, label everything `mkt:vs-<slug>` (`list_labels` / `create_label`).
+   - **Approval surface:** with the user's go-ahead on the copy they have just reviewed, create the page copy as a post on the Planable **Universal content page** (`create_post(workspaceId, universalPageId, text)`), with the intended live URL in the body. Reviewers use `create_comment` (`teamOnly: true` for internal notes), revisions go in via `update_post`, sign-off via `approve_post` — only when the user explicitly asks you to approve (needs a configured approval workflow; otherwise comments serve as sign-off — say which applies). Don't group the page copy with social posts — universal and social pages split into different sub-groups.
+   - **Supporting social series:** draft 3–5 posts from the page's strongest material — the verdict as a hot take, the feature matrix as a carousel outline, the top PAA answer as a question-hook post. Show the series to the user and create it on the social pages only after a go-ahead; label everything `mkt:vs-<slug>` (`list_labels` / `create_label`). Then offer a compact campaign passport and write it on a yes — one post on a Universal content page titled `Campaign passport: mkt:vs-<slug>` (no Universal page → `campaign-passport-vs-<slug>.md` in the working folder) with goal, launch date, the comparison keywords and the domain's current positions for them, workspace + pages. If the user declines, say that `marketing-campaign-impact` will only be able to report label-level engagement.
    - **Scheduling — ask:** offer to spread the series across the week after the page's planned publish date, or leave undated. Drafts only — never set `publishAtScheduledDate`.
-   - Publishing the approved copy to the website/CMS stays manual — state the handoff. After launch, `marketing-campaign-impact` measures the label; seo-skills' `seo-page` tracks the URL's ranking trajectory.
+   - Publishing the approved copy to the website/CMS stays manual — state the handoff. After launch, `marketing-campaign-impact` measures the label; `seo-page` (seo-skills plugin, if installed) tracks the URL's ranking trajectory.
 
 ## Output format
 
@@ -97,7 +98,7 @@ marketing-comparison-page-{target-slug}-{YYYYMMDD}/
 ├── COMPARISON.md                     (the page draft — primary deliverable)
 ├── 05-feature-matrix.md              (inferred dimensions × brands — load-bearing reference for PMs/writers)
 ├── schema.jsonld                     (paste-ready Product + Breadcrumb + FAQ — load-bearing artefact for engineering)
-├── 05b-competitor-elements.csv       (only if --bulk-scrape ran: competitor URL × on-page-element grid)
+├── 05b-competitor-elements.csv       (only if step 5b ran: competitor URL × on-page-element grid)
 └── evidence/
     ├── 01-competitor-context.md      (DATA_getDomainCompetitors — raw step output)
     ├── 02-keyword-overlap.md         (DATA_getDomainKeywords for each brand — raw step output)
@@ -105,7 +106,7 @@ marketing-comparison-page-{target-slug}-{YYYYMMDD}/
     └── 04-existing-pages-teardown.md (top-3 SERP winners' structure + schema/og — Firecrawl-recovered)
 ```
 
-Top-level: `COMPARISON.md` + `05-feature-matrix.md` + `schema.jsonld`. The 01–04 step files preserve raw API/scrape outputs in `evidence/`. `05b-competitor-elements.csv` only appears when `--bulk-scrape` was passed.
+Top-level: `COMPARISON.md` + `05-feature-matrix.md` + `schema.jsonld`. The 01–04 step files preserve raw API/scrape outputs in `evidence/`. `05b-competitor-elements.csv` only appears when step 5b ran.
 
 `COMPARISON.md` for an "X vs Y" page follows this shape:
 
@@ -172,11 +173,11 @@ See `schema.jsonld` — paste into `<head>`.
 
 - **Balance is conversion.** Pages that pretend the user's product is always better lose trust and rankings. Honest assessments outperform partisan ones.
 - Respect rate limit. Step 5 (fetching top 3 SERP winners) takes 3 WebFetch calls + earlier MCP queries.
-- Cost: ~15–25 SE Ranking credits typical, +3 Firecrawl credits for the schema/og benchmark in step 5, +1 Firecrawl credit per URL in step 5b (opt-in only). Pass `--no-firecrawl` to skip both Firecrawl steps.
+- Cost: ~15–25 SE Ranking credits typical, +3 Firecrawl credits for the schema/og benchmark in step 5, +1 Firecrawl credit per URL in step 5b (opt-in only). Skip both Firecrawl steps if the user asks.
 - **Schema:** use `Product` for both products in a vs page, plus `BreadcrumbList`, plus `FAQPage` if the FAQ section is real Q&A (not a manufactured one).
 - For "alternatives to X" pages, position the user's product as one of N (typically 5–10), not as #1. Numbered listicles convert better than self-promotional alternatives pages.
 - For "best X for Y" pages, segment by use case explicitly — "best for solo developers" vs "best for enterprise teams" — this lets you win multiple long-tail variants.
-- Run seo-skills' `seo-page` on the published page after 30 days to track ranking trajectory; `marketing-campaign-impact` measures the social series via its label.
-- Pair with seo-skills' `seo-content-audit` to E-E-A-T-check the draft before publishing.
+- Run `seo-page` (seo-skills plugin, if installed) on the published page after 30 days to track ranking trajectory; `marketing-campaign-impact` measures the social series via its label.
+- Pair with `seo-content-audit` (seo-skills plugin, if installed) to E-E-A-T-check the draft before publishing.
 - The PAA-derived FAQ in step 4 is gold — those are the questions users are actually searching, and answering them in-page raises citation-readiness for AIO.
 - Don't auto-publish. Hand the draft to a writer/PM for fact-checking and brand-voice tuning.

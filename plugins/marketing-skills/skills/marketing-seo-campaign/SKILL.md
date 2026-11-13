@@ -46,7 +46,8 @@ Work sequentially (respect the Data API limit of ~10 requests/second). Save raw 
 - `DATA_getDomainCompetitors` — confirm the real organic competitors (sort by shared keywords; take the top 3–5). Note: this call returns the full set and may be written to a file — read and parse it.
 - `DATA_getDomainKeywordsComparison` — the core gap list: keywords competitors rank for that the target does not. Filter to keep it useful (e.g. informational/commercial intent, volume > a sensible floor, difficulty the domain can realistically win). **Then judge relevance, not just the numbers** — competitor gap lists are noisy and surface off-brand junk (glossary entries, follower-farming terms like "free followers", unrelated blog tangents). Discard anything that isn't a topic the target could credibly post about; a high-volume term the brand has no business addressing is not an opportunity. If a strict filter returns almost nothing, loosen one threshold or try another competitor rather than forcing a campaign out of junk.
 - `DATA_getRelatedKeywords` + `DATA_getKeywordQuestions` — expansion terms and real questions people ask. **Question keywords are gold for social hooks** — they map directly to post openers. These endpoints often return only a handful of rows per seed, so query **several seeds (3–5 core topics) and aggregate** rather than trusting one; a seed returning 1–2 questions is normal, not a sign there's no demand.
-- `DATA_getSerpResults` for the 2–4 strongest themes — read the intent and the SERP features so the social angle matches what searchers actually want.
+- `DATA_getSerpResults` for the 2–4 strongest themes — read the intent and the SERP features so the social angle matches what searchers actually want. Pass `language_code` (required) plus `country_code`. Standard results return organic, ads and featured-snippet items (the summary names any other features present, without their content); add `result_type: advanced` (≈10 credits per query) when AI Overview / PAA / pack presence matters.
+  - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
 - **Ranking losses (if a project exists):** call `PROJECT_getPositionHistory` (type `avg_pos` or `visibility`) to find terms that slipped. A recovering or slipping keyword is a strong "we have something to say" social trigger. If there is no project, skip this and rely on the gap analysis above.
 
 ### 3. Cluster into themes, then into angles
@@ -78,8 +79,12 @@ Show all drafts in a preview before creating anything, unless the user said "jus
 ### 6. Campaign contract (what makes it measurable)
 
 1. **Label**: create/reuse `mkt:<campaign-slug>` and attach it to every draft in the batch. Slug = short + dated, e.g. `mkt:gaps-acme-2026q3`.
-2. **Campaign passport**: one post on a Universal content page titled `Campaign passport: mkt:<slug>` (fall back to saving `campaign-passport-<slug>.md` to outputs if the workspace has no Universal page — check `list_pages` for `type: "universal"`). Contents, factual and compact: goal, launch date, source themes with their keywords/questions and volumes, the **baseline numbers already pulled during research** (target's current positions for the targeted terms, traffic figures), tracked terms, workspace + pages used. `marketing-campaign-impact` reads this verbatim later — don't editorialise it.
+2. **Campaign passport**: one post on a Universal content page titled `Campaign passport: mkt:<slug>` (check `list_pages` for `type: "universal"`; if there is none, save `campaign-passport-<slug>.md` in the working folder and tell the user where it is — the measuring skills look for that exact filename when there is no Universal page). Contents, factual and compact: goal, launch date, source themes with their keywords/questions and volumes, the **baseline numbers already pulled during research** (target's current positions for the targeted terms, traffic figures), tracked terms, the SE Ranking `site_id` when a project is used, workspace + pages used. `marketing-campaign-impact` reads this verbatim later — don't editorialise it.
 3. **Optional deeper tracking** (needs an SE Ranking project + explicit user confirmation — it consumes plan limits): `PROJECT_addKeywords(site_id, keywords[])` for the campaign's target terms, so position movement is tracked automatically.
+
+   **Add only the campaign's target terms.** The research pull is hundreds or thousands of keywords — that is the research set, not the tracking set. What goes in is the handful of terms the posts actually target, usually 10–30. `PROJECT_addKeywords` accepts at most 100 per call, the user's plan may allow fewer, and every tracked keyword uses their allowance on every check cycle from then on.
+
+   **Show the list and the count, then ask** — e.g. *"I'd add these 14 keywords to your SE Ranking project to track position over time. This uses your plan's keyword allowance. Go ahead?"* Never write to the project without an explicit yes. If the call fails on a limit, say so plainly, note that the drafts and passport are unaffected, and offer a smaller set. Record the `site_id` in the passport.
 
 If the user declines instrumentation, proceed — but say plainly the campaign won't be measurable later.
 
@@ -103,7 +108,7 @@ Keep these in mind when creating social content meant to target a specific keywo
 
 1. A short **content plan** the user can scan: theme → source keyword/question (with volume/difficulty) → platform → angle.
 2. The **created drafts** summary with Planable links.
-3. Optional: save a `campaign-brief.md` to the outputs folder if the user wants something to circulate.
+3. Optional: save a `campaign-brief.md` to the working folder if the user wants something to circulate.
 
 ## Tips
 

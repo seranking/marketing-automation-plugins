@@ -5,11 +5,12 @@ description: Atomize one published article into a platform-adapted social pack d
 
 # Content Social Pack
 
-Generate a set of on-brand social media post drafts and create them directly in Planable.
+Turn one published article into a platform-adapted social pack and create the drafts in Planable. The input is an article URL: start with "The article-to-pack derivation" section below, which prefills the inputs for Steps 1–4.
 
 ## How this skill works
 
-1. Gather inputs (client/workspace, platform, topic, number of posts, tone/angle)
+0. Fetch the article and derive the default pack (see "The article-to-pack derivation")
+1. Gather the remaining inputs (client/workspace, platforms, tone/angle)
 2. Identify the right workspace and page(s) in Planable
 3. Generate the post copy
 4. Create each draft directly in Planable via the connector
@@ -22,8 +23,8 @@ Before writing anything, confirm:
 
 - **Workspace / client name** — which Planable workspace to post into
 - **Platform(s)** — LinkedIn, Instagram, Facebook, X/Twitter, TikTok, etc.
-- **Topic or brief** — what the posts should be about
-- **Number of posts** — how many drafts to create (default: 5 if not specified)
+- **Source article** — the URL the pack is derived from (already fetched in the derivation step)
+- **Pack contents** — the default pack from the derivation step, unless the user asks for a different mix
 - **Tone or angle** — optional; if not provided, use the platform's natural register
 - **Proposed schedule** — optional; if provided, space posts evenly across the range
 - **Labels** — optional; ask only if the user mentions them
@@ -64,9 +65,8 @@ Generate all drafts before creating any of them in Planable.
 **Writing guidelines:**
 - Match the client's industry and voice if context is available
 - Vary the hook and format across the batch — don't repeat the same structure
-- No banned words: seamless, streamline, effortlessly, optimize, enhance, all-in-one, unleash, eliminate, etc.
+- Avoid filler marketing words (seamless, streamline, effortlessly, unleash, all-in-one…); a `brand-profile.md` banned-word list takes precedence
 - Active voice, contractions, short sentences
-- If posts are for Planable's own channels, apply the brand voice from `brand-profile.md` when present
 
 Show the user all drafts in a clear preview **before** creating them in Planable, unless they've explicitly said "just create them."
 
@@ -127,7 +127,7 @@ After all posts are created, report back:
 
 If `brand-profile.md` exists in the working folder (created by `content-brand-setup`), read it before writing anything and apply its voice, banned words, emoji/hashtag policy, and CTA conventions to every draft this skill produces. If it doesn't exist, proceed with a neutral professional tone and suggest running `content-brand-setup` once at the end.
 
-## The article-to-pack derivation (run this BEFORE Step 1)
+## The article-to-pack derivation (the first thing to run)
 
 This skill's input is a published article URL, not a raw topic. The steps above are the drafting engine; this section defines what feeds it.
 
@@ -139,8 +139,8 @@ This skill's input is a published article URL, not a raw topic. The steps above 
    - Newsletter: 1 ~100-word teaser section
    - 3 quote hooks for future graphics
 3. **Run Steps 1–4 above** with these as the prefilled inputs — same preview-before-commit rule: show the full pack, get approval, then create.
-4. **Group as a campaign.** Create a Planable campaign named after the article and assign all pack drafts to it, so the pack stays traceable to its source. Reference the article URL in each draft's internal note or comment where the platform supports it.
+4. **Group the pack.** If the Planable connector offers campaigns, create one named after the article and assign all pack drafts to it; otherwise apply one shared label named after the article (`list_labels` / `create_label`). Either way the pack stays traceable to its source. Items with no Planable page (the newsletter teaser, quote hooks) go in SOCIAL-PACK.md only. Reference the article URL in each draft's internal note or comment where the platform supports it.
 
 ## Final output
 
-Drafts in Planable grouped as one campaign, plus **SOCIAL-PACK.md** — a summary table (platform, hook, status, Planable link) the user can skim to see the whole pack at a glance.
+Drafts in Planable grouped as one campaign (or sharing one label), plus **SOCIAL-PACK.md** — a summary table (platform, hook, status, Planable link) the user can skim to see the whole pack at a glance.

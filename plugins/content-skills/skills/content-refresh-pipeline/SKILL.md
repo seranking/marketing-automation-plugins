@@ -3,7 +3,7 @@ name: content-refresh-pipeline
 description: Audit existing content in batch and turn verdicts into an executable refresh pipeline. Runs the E-E-A-T (60-item) + CITE (30-item) audit on 1–10 URLs, ranks everything into a prioritized refresh queue by severity and traffic at risk, produces a per-page fix list, drafts re-distribution posts in Planable for pages that pass, and sets a re-check plan to measure recovery. Use whenever the user wants to decide what to update and act on it — "which pages should we refresh", "content refresh plan", "audit these articles and fix them", "content decay", "update our old posts", "is our content still good". Requires the SE Ranking MCP; the Planable MCP is needed for re-distribution drafts. For a single-page verdict without a queue or distribution, use seo-content-audit from seranking/seo-skills instead.
 ---
 
-> Example output: [examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md) (hosted in the seranking/seo-skills repo)
+> Example of the single-page verdict (from the seo-skills counterpart of this skill; this skill's own deliverable adds the Phase 2 sections and uses its own filename): [examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md) (hosted in the seranking/seo-skills repo)
 
 # Content Refresh Pipeline
 
@@ -13,24 +13,26 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
 
 - SE Ranking MCP server connected.
 - Claude's `WebFetch` tool available.
-- User provides: (a) the URL of an existing piece of content (or pasted content + intended URL), (b) target keyword the content is meant to rank for. Optional: target country (default `us`).
+- User provides: (a) 1–10 URLs of existing content (or, for a single piece, pasted content + intended URL), (b) the target keyword each one is meant to rank for. Optional: target country (default `us`).
 
 ## Process
 
-1. **Fetch content** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
-   - **Validate target & preflight.** Run a quick preflight: SE Ranking credit balance, Firecrawl availability, Google APIs. (The canonical 3-stage checklist lives in seo-skills' seo-firecrawl skill, when installed.) Skill-specific notes:
+1. **Fetch content** `WebFetch` (always) + the Firecrawl MCP's `firecrawl_scrape` (when available)
+   - **Validate target & preflight.** Run a quick preflight: SE Ranking credit balance, Firecrawl availability, GA4 availability. Skill-specific notes:
      - Estimated SE Ranking cost for this skill: ~10–15 credits typical (AIO context + AIO prompt sampling for the target keyword + audited URL).
-     - Firecrawl: optional with WebFetch fallback, 1 Firecrawl credit per URL audited (default cap 50 URLs, hard cap 200). Surface the projected Firecrawl credit count before continuing. Pass `--no-firecrawl` to force WebFetch-only inspection (lower-confidence veto checks; see step 4 caveat).
-     - Google APIs: tier 2 (GA4 available) unlocks step 3b (GA4 organic traffic on the audited URL) after the AIO context step. (Full recipe: seo-skills' seo-google skill, when installed.)
+     - Firecrawl: optional with WebFetch fallback, 1 Firecrawl credit per URL audited (a run covers at most 10 URLs). Surface the projected Firecrawl credit count before continuing. If the user asks to skip Firecrawl, run WebFetch-only inspection (lower-confidence veto checks; see step 4 caveat).
+     - GA4: if a GA4 connector is available **and** has a property for the audited domain, it unlocks step 3b (GA4 organic traffic on the audited URL) after the AIO context step.
    - **WebFetch first** (free, instant): pull the markdown for word count, H-tag hierarchy, source citations (links to authorities, numbered references), images, tables, code blocks, comment thread.
    - **Page-type detection.** From the URL pattern, H1 phrasing, and JSON-LD `@type`, classify the page as one of: ultimate guide / pillar, how-to, listicle / best-of, comparison (X vs Y), explainer, review (single product), landing page (commercial). Look up the corresponding word-count floor from `references/core-eeat.md` → "Word-count floors by page type". Surface the detected type, the applied floor, and the actual word count in `evidence/01-content-snapshot.md`. If the actual word count is materially below the floor, flag it for the depth E-E-A-T items (auto ✗ unless the auditor justifies the exception).
    - **Firecrawl second** — recovers what WebFetch's markdown loses:
      - From `metadata`: canonical URL, robots, lang, `og:title`.
-     - From the returned `html`: every `<script type="application/ld+json">` block. Parse for `Article` / `BlogPosting` schema and extract `author` (name, `@type: Person`, optional `url` + `sameAs`), `datePublished` / `dateModified` (ISO 8601), `publisher`, `mainEntityOfPage`. Detect `Person` schema standalone if present.
+     - Request `formats: ["rawHtml"]` — the `html` format strips `<script>` and `<head>` tags, so it never contains the schema. From the returned `rawHtml` (large; usually saved to a file, so parse it there): every `<script type="application/ld+json">` block. Parse for `Article` / `BlogPosting` schema and extract `author` (name, `@type: Person`, optional `url` + `sameAs`), `datePublished` / `dateModified` (ISO 8601), `publisher`, `mainEntityOfPage`. Detect `Person` schema standalone if present.
      - DOM-level byline detection: locate the structural byline (`<a rel="author">`, `<meta name="author">`, `<span class="byline">`, `[itemprop="author"]`). Distinguish a real byline element from prose mentions ("Written by Jane in collaboration..." in body text is not a byline; `<a rel="author">Jane Doe</a>` is).
    - **If Firecrawl unavailable:** WebFetch portion runs unchanged. Mark schema-type detection and structural byline detection as `(skipped — Firecrawl required)` in `evidence/01-content-snapshot.md`. Step 4's veto checks #1 and #4 fall back to prose-level inspection (less reliable) — surface that caveat in `VERDICT.md`.
 
-2. **AIO context** `DATA_getAiSearchOverview` and `DATA_getAiSearchLeaderboard`
+2. **AIO context** `DATA_getSerpResults(query[], language_code, country_code, result_type: advanced)`
+   - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
+   - Run the target keyword with the advanced result type (≈10 credits; `language_code` is required) and read the AI Overview item. `DATA_getAiSearchOverview` / `DATA_getAiSearchLeaderboard` are domain-level totals that take no keyword, so they cannot answer these questions.
    - For the target keyword: is there an AIO?
    - Who is cited in the AIO?
    - Is the candidate URL cited?
@@ -40,15 +42,13 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
    - Sample LLM prompts where the target URL's domain appears as a source.
    - Cross-reference with the candidate URL — does it show up in any sampled prompts?
 
-3b. **GA4 organic traffic on the audited URL** *(only if google-api.json is present, tier ≥ 2)*
+3b. **GA4 organic traffic on the audited URL** *(only if a GA4 connector is available and one of its properties is the audited site)*
    - Replaces the implicit traffic estimation with actual measured organic sessions for the audited URL.
-   - Pull the top organic landing pages (last 28 days):
-     `python3 scripts/ga4_report.py --report top-pages --days 28 --json` (the script ships with seo-skills' seo-google extension; skip this step if not installed)
+   - Pull the top organic landing pages (last 28 days) through whatever GA4 connector or report tool the session has. First list the connector's accounts/properties and confirm one belongs to the audited domain — a connector holding only other sites' properties would report the page as "not in top-100", which reads as zero traffic but is wrong. No matching property → skip the step and write `GA4: no property for this domain`. This plugin ships no GA4 script, so skip the step when no connector is available.
    - Filter the result client-side for the audited URL's path. Surface in `VERDICT.md` "## Snapshot" alongside the existing AIO citation cross-check:
      - GA4 organic last 28d: `{sessions} sessions / {users} users / avg engagement {n}s`
      - If the URL doesn't appear in the top-100 organic landing pages: "GA4: not in top-100 organic landing pages last 28d — low or zero traffic."
    - **This is a signal, not a veto.** Low GA4 traffic on a YMYL page with high E-E-A-T is informative ("we're not earning the visibility our content quality should support") but doesn't change the publish decision.
-   - (Full recipe: seo-skills' seo-google skill, when installed.)
 
 4. **Score E-E-A-T** using `references/core-eeat.md`
    - 60-item rubric across 4 dimensions (15 items each).
@@ -88,6 +88,8 @@ content-refresh-pipeline-{target-slug}-{YYYYMMDD}/
     ├── 01-content-snapshot.md       (HTML extracts + page metadata — raw step output)
     └── 02-aio-context.md            (AIO presence, citations, patterns — raw step output)
 ```
+
+**More than one URL:** create one `{url-slug}/` subfolder per page inside the run folder, each holding the tree above, and write `REFRESH-PLAN.md` (Phase 2) at the top level.
 
 Step files 01 + 02 are inlined as a "Snapshot" / "AIO context" section in `VERDICT.md`; the copies in `evidence/` preserve raw step output. `03-eeat-scoring.md`, `04-cite-scoring.md`, and `05-aio-winner-comparison.md` stay at top level — editors consult the rubric scoring detail directly, and the AIO winner comparison is the live competitive evidence the rubric verdict rests on.
 
@@ -132,7 +134,7 @@ Step files 01 + 02 are inlined as a "Snapshot" / "AIO context" section in `VERDI
 - Gap vs cited sources: {bulleted gaps}
 
 ## Snapshot (measured)
-- GA4 organic last 28d: {sessions} sessions / {users} users / avg engagement {n}s  *(or `not in top-100` / `not configured (Tier 2 required)`)*
+- GA4 organic last 28d: {sessions} sessions / {users} users / avg engagement {n}s  *(or `not in top-100` / `no GA4 connector` / `no property for this domain`)*
 
 ## Top 5 fixes
 
@@ -151,12 +153,12 @@ See:
 ## Tips
 
 - Respect rate limit. AIO + AIO-prompts queries are ~5–10 calls; plenty of headroom.
-- Call `DATA_getSubscription` before running to read the plan's remaining unit limits. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (default cap 50 URLs).
+- Call `DATA_getSubscription` before running to read the plan's remaining unit limits. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (max 10 URLs per run).
 - The thresholds (75% E-E-A-T, 70% CITE) are starting points. Tune per domain — a YMYL site (medical, financial) should require higher (85%/80%); a general-interest blog can run lower (65%/60%).
 - The veto checks are not negotiable. A piece with anonymous authorship on a YMYL topic doesn't pass regardless of score.
 - For pieces that score "publish with fixes," the top-5 list is the deliverable. Hand it to the writer; re-audit after fixes.
-- Pair with `content-campaign-brief` for the new-article counterpart: this skill audits existing content, content-brief produces new content.
-- Pair with `seo-sxo` (from seranking/seo-skills) if the page has technical/page-type issues — that's a different diagnosis.
+- Pair with `content-campaign-brief` for the new-article counterpart: this skill audits existing content, `content-campaign-brief` produces new content.
+- Pair with `seo-sxo` (from seranking/seo-skills, if installed) if the page has technical/page-type issues — that's a different diagnosis.
 - The 60-item E-E-A-T rubric and 30-item CITE rubric are in `references/`. They are opinionated — adjust for your domain's editorial standards.
 
 ---
@@ -171,7 +173,7 @@ A verdict tells you a page's state; a pipeline tells the team what to do this sp
 
 1. **Refresh queue.** Rank all audited pages: no-publish / veto pages first, then by severity of failed items × page traffic (use `DATA_getUrlOverviewWorldwide` for traffic context when available). The queue answers "what do we fix first and why".
 2. **Per-page fix list.** Compress each page's failed checklist items into a concrete, ordered fix list — what to change, in priority order. This is what a writer executes; keep it actionable, not diagnostic.
-3. **Re-distribution for passing pages.** Pages with a publish or publish-with-fixes verdict deserve fresh reach: draft 1–2 re-promotion posts per passing page in Planable (as drafts), highlighting what makes the page worth reading now. If the Planable MCP is not connected, include the post copy in the deliverable instead.
+3. **Re-distribution for passing pages.** Pages with a publish or publish-with-fixes verdict deserve fresh reach: draft 1–2 re-promotion posts per passing page, highlighting what makes the page worth reading now. Ask which Planable workspace and pages to use, show the copy, and create the drafts only after a go-ahead (drafts only — never set `publishAtScheduledDate`). If the Planable MCP is not connected, include the post copy in the deliverable instead.
 4. **Re-check plan.** Set the re-audit date (default: 6–8 weeks out) and list which metrics to compare — rankings, AI citations, organic traffic — so recovery is verified, not assumed.
 
 ## Final output (extends the single-page verdict)

@@ -3,7 +3,7 @@ name: content-campaign-brief
 description: Turn a topic into a launch-ready content campaign, not just a document. Produces a writer-ready SEO brief (keyword research, SERP and competitor analysis, outline, internal links, AI Search angle) PLUS teaser social drafts created in Planable around the planned publish date PLUS a tracking baseline for keywords and AI prompts. Use whenever the user wants a brief that ships with distribution — "campaign brief", "brief with social posts", "content launch plan", "plan the article and the posts", "brief plus promotion" — or asks to prepare an article launch end to end. Requires the SE Ranking MCP; the Planable MCP is needed for the distribution phase. For a standalone editorial brief without distribution or tracking, use seo-content-brief from seranking/seo-skills instead.
 ---
 
-> Example output: [examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md) (hosted in the seranking/seo-skills repo)
+> Example of the brief part (from the seo-skills counterpart of this skill; this skill's own deliverable adds the Phase 2 sections and uses its own filename): [examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md) (hosted in the seranking/seo-skills repo)
 
 # Content Campaign Brief
 
@@ -35,19 +35,20 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
    - From the gaps, select one topic. Justify the pick with: traffic potential, difficulty, relevance to the target domain's product. Surface reasoning to the user before proceeding.
 
 5. **SERP and keyword deep-dive for the chosen topic**
-   - `DATA_getSerpResults` for the top 10 organic + SERP features (AIO, PAA, Featured Snippet, Video).
+   - `DATA_getSerpResults(query[], language_code, country_code, result_type: advanced)` for the top 10 organic + SERP features (AIO, PAA, Featured Snippet, Video). `language_code` is required, and advanced (≈10 credits per query) is the only result type that returns AIO/PAA/video — standard returns organic, ads and featured-snippet items and only names the other features in its summary.
+     - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
    - `DATA_getRelatedKeywords` and `DATA_getSimilarKeywords` for expansion.
    - `DATA_getKeywordQuestions` for People-Also-Ask and question-based variations.
-   - `DATA_getAiSearchOverview` + `DATA_getAiSearchLeaderboard` to see which brands LLMs cite today for the topic.
+   - Read the AI Overview item in that advanced SERP result to see which sources are cited for this query today. For the domain's wider AI footprint, `DATA_getAiSearchPromptsByTarget(target, engine, source)` lists prompts where it is cited. `DATA_getAiSearchOverview` / `DATA_getAiSearchLeaderboard` are domain-level totals and take no keyword or topic.
 
-6. **Top 3 content analysis** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+6. **Top 3 content analysis** `WebFetch` (always) + the Firecrawl MCP's `firecrawl_scrape` (when available)
    - **WebFetch first** (free, instant): pull markdown for the top 3 ranking URLs. Extract H1/H2/H3 spine, word count per article, shared subtopics, gaps, and prose-level formatting patterns.
    - **Firecrawl second** (3 Firecrawl credits — 1 per top-3 winner) — recovers what WebFetch's markdown can't show:
      - From `metadata`: `<title>` length (the real string, not markdown's first heading), meta description length, `og:title`, `og:description`, `og:image`, `twitter:card`.
-     - From the returned `html`: every `<script type="application/ld+json">` block. Parse and list `@type`s per winner (Article, FAQPage, BreadcrumbList, Product, etc.) — these become the "schema baseline" for the new article.
+     - Request `formats: ["rawHtml"]` — the `html` format strips `<script>` and `<head>` tags, so it never contains the schema. From the returned `rawHtml` (large; usually saved to a file, so parse it there): every `<script type="application/ld+json">` block. Parse and list `@type`s per winner (Article, FAQPage, BreadcrumbList, Product, etc.) — these become the "schema baseline" for the new article.
      - On-page signals: hero-image presence, byline structure (`<a rel="author">`, `<meta name="author">`), table count, code-block count.
    - **Classify the brief's template** against the 8-template map in `references/intent-template-map.md`. Cross-reference: (a) the dominant page type across the SERP top-10 (use the page-type heuristics from seo-skills' seo-sxo skill when installed; otherwise classify directly from SERP titles and formats), (b) PAA patterns from step 5, (c) the keyword's intent classification from `DATA_getRelatedKeywords`. Pick one of: `ultimate-guide` / `how-to` / `listicle` / `explainer` / `comparison` / `review` / `best-of` / `landing-page`. If the SERP is split across types, follow the MIXED rule (see Tips). The chosen template determines the recommended H1/H2 outline shape and word-count floor — record both the template and a one-sentence justification in `CAMPAIGN-BRIEF.md`.
-   - **If Firecrawl unavailable (or `--no-firecrawl` passed):** WebFetch portion runs unchanged. The brief's "Top 3 winners — on-page benchmark" subsection (see Output) emits `(skipped — Firecrawl required for schema/og:* on competitor pages)`. Template classification still runs from WebFetch + SERP data.
+   - **If Firecrawl unavailable (or the user asked to skip it):** WebFetch portion runs unchanged. The brief's "Top 3 winners — on-page benchmark" subsection (see Output) emits `(skipped — Firecrawl required for schema/og:* on competitor pages)`. Template classification still runs from WebFetch + SERP data.
 
 7. **Internal linking plan**
    - `DATA_getDomainKeywords` filtered to the target domain plus WebFetch of 5 high-ranking pages on topically adjacent queries.
@@ -153,7 +154,7 @@ Cite: {sources to link out to}
 ## Tips
 
 - Respect SE Ranking Data API rate limit: 10 requests per second. Iterate sequentially, do not fan out across 20 keywords in parallel.
-- **Firecrawl cost.** Step 6's competitor benchmark adds 3 Firecrawl credits per run (1 per top-3 winner). Pass `--no-firecrawl` to skip it (the brief still ships, just without the on-page benchmark table).
+- **Firecrawl cost.** Step 6's competitor benchmark adds 3 Firecrawl credits per run (1 per top-3 winner). Skip it if the user asks (the brief still ships, just without the on-page benchmark table).
 - If the user only provides a domain and no topic, run step 3 first and present the top 3 gap opportunities before deciding.
 - Keep the brief self-contained. A freelance writer should not need to open the raw-data files unless they want to double-check something.
 - Do not hallucinate keyword difficulty or volume. If an endpoint returns null, mark the field unknown in the brief rather than guessing.
@@ -173,7 +174,7 @@ The brief above tells a writer what to create. This phase makes sure the article
 1. **Teaser social drafts in Planable**
    - Ask which Planable workspace/page(s) to use and the target publish date (default: 2 weeks out).
    - Draft 3–5 teaser posts from the brief's strongest angles — e.g., a stat-led hook from the research, a question post mirroring the top People-Also-Ask item, and a "coming soon" narrative post.
-   - Schedule around the publish date: 1 before (curiosity), 1–2 on publish day, 1–2 in the following week. Create everything as drafts via the Planable MCP — never publish directly.
+   - Schedule around the publish date: 1 before (curiosity), 1–2 on publish day, 1–2 in the following week. Show the user the full draft copy and get a go-ahead before creating anything in Planable. Then create them as drafts (`create_post` per page) — never set `publishAtScheduledDate`, never publish directly.
    - If the Planable MCP is not connected, include the ready-to-paste post copy in the deliverable instead and say so.
 
 2. **Tracking baseline**
@@ -183,4 +184,4 @@ The brief above tells a writer what to create. This phase makes sure the article
 
 ## Final output (replaces the standalone brief)
 
-Assemble everything into **CAMPAIGN-BRIEF.md**: the full editorial brief from Phase 1, then a Distribution plan section (teaser posts + schedule + Planable links if created), then a Tracking baseline section. One file a content manager can execute end to end.
+Assemble everything into **CAMPAIGN-BRIEF.md**: the full editorial brief from the main process above, then a Distribution plan section (teaser posts + schedule + Planable links if created), then a Tracking baseline section. One file a content manager can execute end to end.

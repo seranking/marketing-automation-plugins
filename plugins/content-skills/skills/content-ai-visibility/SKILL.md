@@ -32,7 +32,7 @@ Only continue to the process steps below once both calls return a successful res
 If the user gives a domain but not the exact brand string, call `DATA_getAiSearchBrand(target, source)` to get the name SE Ranking attributes to it. Do the same for each competitor. Confirm the Planable workspace and target platforms.
 
 ### 2. Baseline AI visibility
-- `DATA_getAiSearchOverview(target, source, brand?)` — capture brand_presence, link_presence, ai_opportunity_traffic, and average_position. **Read `previous` before quoting change:** if it's `null`, this is the first snapshot — report the current values as a baseline and do **not** present the `change_percent` of 100 as real growth.
+- `DATA_getAiSearchOverview(target, source, brand?)` — capture brand_presence, link_presence and ai_opportunity_traffic (`average_position` is always null — ignore it). **Read `previous` before quoting change:** if it's `null`, this is the first snapshot — report the current values as a baseline and do **not** present the `change_percent` of 100 as real growth.
 - `DATA_getAiSearchLeaderboard(primary{target,brand}, competitors[{target,brand}], source, engines[])` — share of voice for the brand vs competitors, per engine. Build a quick heatmap (rows = brands, columns = engines).
   - **This endpoint is heavy and can return a 504 timeout** when you pass many competitors × many engines at once. Query **one engine at a time** (or keep it to ≤3 competitors per call), and retry once on timeout. If it still fails, fall back to calling `DATA_getAiSearchOverview` for each competitor and compare brand_presence / link_presence yourself.
 
@@ -54,14 +54,14 @@ For each target cluster, write a hypothesis: *"If we publish clear, citable cont
 Present the clusters and hypotheses to the user before drafting.
 
 ### 5. Draft and create in Planable
-Write platform-appropriate copy, then create drafts: `create_post` per page (per-platform copy) or `create_grouped_post` for synced content. Tag the batch with a label (via `list_labels` / `create_label`, e.g. "AI-visibility") so the campaign is easy to isolate when measuring. 
+Write platform-appropriate copy. Show the user the full draft copy and get a go-ahead before creating anything in Planable, then create drafts: `create_post` per page (per-platform copy) or `create_grouped_post` for synced content. Tag the batch with a label (via `list_labels` / `create_label`, e.g. "AI-visibility") so the campaign is easy to isolate when measuring. 
 
 **Scheduling — ask before creating.** Don't guess dates or leave everything undated by default. Ask how the user wants the batch dated and offer: **spread evenly** across a window (e.g. the next 7 days, one post per slot at a sensible hour), a **fixed cadence/interval** (e.g. every weekday at 10:00, laid out from a start date they give), **manual** dates per post, or **no dates yet** (undated drafts to place on the calendar later). Convert each chosen time to ISO 8601 and pass it as `scheduledAt`. Keep posts as **proposed drafts** — don't set `publishAtScheduledDate` — so nothing auto-publishes; only set it `true` if the user explicitly wants auto-publishing. Scheduled times are treated as **UTC**, so confirm the timezone or state that times are UTC.
 
 ### 6. Instrument before/after measurement
 This is what makes the loop real:
 
-- **Ongoing AI tracking (if a project exists):** create an AI Result Tracker engine with `PROJECT_createLlmEngine`, add the target prompts with `PROJECT_addPrompts(site_id, llm_id, prompts[])`, then read movement later with `PROJECT_getPromptsRankings` and `PROJECT_getLlmStatistics`. Because this writes to the user's live project (and consumes plan limits), confirm before creating engines/prompts.
+- **Ongoing AI tracking (if a project exists):** create an AI Result Tracker engine with `PROJECT_createLlmEngine`, add the target prompts with `PROJECT_addPrompts(site_id, llm_id, prompts[])`, then read movement later with `PROJECT_getPromptsRankings` and `PROJECT_getLlmStatistics`. Add only the prompts this campaign targets (usually 10–30, never the full research pull; `PROJECT_addPrompts` takes at most 100 per call), show the list with its count, and create engines/prompts only after an explicit yes — every prompt uses the user's plan allowance on every check cycle.
 - **Periodic re-checks:** re-run `DATA_getAiSearchOverview` and `DATA_getAiSearchLeaderboard` after the campaign has run and diff against the baseline from step 2.
 - **Social side:** `get_post_metrics_summary(workspaceId, pageIds, startDate, endDate)` on the labelled campaign posts shows the engagement the content earned.
 
@@ -95,7 +95,7 @@ Keep these in mind when creating social content meant to target a specific keywo
 ## Edge cases & limits
 
 - **No sentiment.** These tools don't measure how a brand is *talked about*, only whether/where it appears. If the user wants sentiment, say it's not available through the connected MCPs.
-- **Social is indirect.** Appearing in AI answers is heavily influenced by citable web content. This skill drives the social lever and tracks the result; it cannot publish or score website pages.
+- **Social is indirect.** Appearing in AI answers is heavily influenced by citable web content. This skill drives the social lever and tracks the result; it recommends on-page citability fixes (Phase 2) but cannot publish or edit website pages.
 - **Ongoing tracking needs a project.** The one-off `DATA_` AI Search calls work without a project; the AI Result Tracker (prompts over time) requires an SE Ranking project.
 - Posts are created as drafts — publishing happens in Planable after approval.
 
@@ -115,8 +115,8 @@ Social builds narrative presence, but LLMs cite pages. For each missing or conte
 
 ## Phase 3: Before/after share-of-voice re-check
 
-Record today's AI share-of-voice snapshot (the Phase 1 numbers: which engines, which prompts, who's cited). Set a re-check for 4–6 weeks out: same prompts, same engines, compare owned/contested/missing movement, and correlate with the social posts and on-page changes that shipped. Without the baseline, nobody can prove the work moved anything.
+Record today's AI share-of-voice snapshot (the baseline numbers from the main process above: which engines, which prompts, who's cited). Set a re-check for 4–6 weeks out: same prompts, same engines, compare owned/contested/missing movement, and correlate with the social posts and on-page changes that shipped. Without the baseline, nobody can prove the work moved anything.
 
 ## Final output (extends the social campaign)
 
-**AI-VISIBILITY-PLAN.md**: the SoV snapshot + prompt clusters from Phase 1, the per-page citability fixes, content-gap seeds, the social drafts (in Planable), and the re-check date with the exact prompt list to re-run.
+**AI-VISIBILITY-PLAN.md**: the SoV snapshot + prompt clusters from the main process above, the per-page citability fixes, content-gap seeds, the social drafts (in Planable), and the re-check date with the exact prompt list to re-run.

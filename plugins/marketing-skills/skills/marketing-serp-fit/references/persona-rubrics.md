@@ -1,6 +1,6 @@
 # Persona rubrics for SXO scoring
 
-Score the candidate page from each of these 4 personas. 0–10 per persona; the weighted sum (using the intent-based weighting profile below) is the SXO score (0–100).
+Score the candidate page from each of these 4 personas. 0–10 per persona; the weighted sum (using the intent-based weighting profile below), multiplied by 10, is the SXO score (0–100).
 
 ## 1. The Skimmer
 A reader who lands on the page expecting to extract the answer in <30 seconds. They scan H2s, look for tables/lists, may not read prose at all.
@@ -75,10 +75,10 @@ The page's keyword tells you which intent dominates. Weight the personas accordi
 
 ## Combined SXO score
 
-The SXO score is the **weighted sum** of persona scores (0–100).
+The SXO score is the **weighted sum** of persona scores × 10 (0–100).
 
 - ≥ 75 — page is well-aligned with the SERP it targets.
 - 50–74 — room to improve; see persona-specific gaps in the recommendation.
-- < 50 — likely page-type or intent mismatch; `seo-sxo` will recommend a different page type.
+- < 50 — likely page-type or intent mismatch; this skill's recommendation will be a different page type.
 
 The score is a heuristic. Always cross-reference with actual SERP features (AIO presence, top-10 page types) before recommending a rewrite — those are what Google rewards.

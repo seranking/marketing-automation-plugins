@@ -51,7 +51,7 @@ This is the "what should we work on next quarter" skill. It does not replace spe
 
 4. **Pull specialist inputs (reuse before you re-research)**
    - In the current working directory, look for fresh (<30 days) outputs from the diagnostic skills and ingest their primary deliverables:
-     - `marketing-gap-matrix-*` (routed gap backlog) · `marketing-ai-visibility-benchmark-*` (SoV + social-narrative overlay) · `marketing-content-patterns-*` (what resonates with the audience) · `marketing-local-audit-*` (for local businesses) · seo-skills outputs if present (`seo-technical-audit-*`, `seo-content-audit-*`, `seo-backlinks-profile-*`).
+     - `marketing-gap-matrix-*` (routed gap backlog) · `marketing-ai-visibility-benchmark-*` (SoV + social-narrative overlay) · `*-content-patterns-*.html` (what resonates with the audience — the `marketing-content-patterns` report) · `marketing-local-audit-*` (for local businesses) · seo-skills outputs if present (`seo-technical-audit-*`, `seo-content-audit-*`, `seo-backlinks-profile-*`).
    - Anything missing does NOT block the plan: list it as a **Phase 0 / week-1 work item** ("run marketing-gap-matrix") rather than dispatching it silently — the user controls API spend.
 
 5. **Score the five pillars**
@@ -65,17 +65,17 @@ This is the "what should we work on next quarter" skill. It does not replace spe
 6. **Apply business-type template** (templates differ — pick one and parameterise)
    - **saas** → product-led pillars + integration pages + comparison/alternatives + JTBD content.
    - **ecommerce** → category page hygiene + product schema + faceted-nav indexation rules + review aggregation.
-   - **local** → GBP optimisation + location pages + citation cleanup (note: we don't have a `seo-local` skill yet — flag this as a manual sub-step or external).
+   - **local** → GBP optimisation + location pages + citation cleanup (diagnose with `marketing-local-audit`, execute with `marketing-local-campaign`).
    - **publisher** → topical clusters + author E-E-A-T + freshness cadence + AI-Search citations.
-   - **agency** → service pages + case studies + comparison content + lead-gen LP (use `seo-agency-landing-page`).
+   - **agency** → service pages + case studies + comparison content + lead-gen LP (use `marketing-agency-leadgen`).
    - **b2b-services** → industry-specific landing pages + thought-leadership clusters + decision-stage content.
    - Template provides default work-item categories; the lowest-pillar score from step 5 weights them.
 
 7. **Phase the plan — three phases × three tracks (signature structure)**
    Every phase carries an **SEO track**, an **AI-visibility track**, and a **social track**, each with its own work items — and closes with a **measurement gate**.
    - **Phase 1 (weeks 1–4): Foundations.** SEO: technical fixes that unblock everything else, 1–2 quick-win refreshes. AI: baseline benchmark (`marketing-ai-visibility-benchmark`) if not yet run. Social: fix the cadence floor — `marketing-calendar-audit` weekly, fill uncovered demand with `marketing-post-batch`.
-   - **Phase 2 (weeks 5–8): Build.** SEO: content tier — `marketing-content-brief` per article (brief + distribution in one); comparison page via `marketing-comparison-page` if the competitive frame supports it; schema via seo-skills' `seo-schema`. AI: first `marketing-ai-campaign` on the missing clusters. Social: `marketing-seo-campaign` on the gap-matrix social routes.
-   - **Phase 3 (weeks 9–12): Compound + measure.** SEO: refreshes on what moved; backlink outreach starter (seo-skills' `seo-backlink-gap`). AI: extend winning clusters. Social: double down per `marketing-content-patterns`. Gate: `marketing-campaign-impact` verdicts on every `mkt:*` campaign + `marketing-report` for the quarter.
+   - **Phase 2 (weeks 5–8): Build.** SEO: content tier — `marketing-content-brief` per article (brief + distribution in one); comparison page via `marketing-comparison-page` if the competitive frame supports it; schema via `seo-schema` (seo-skills plugin, if installed). AI: first `marketing-ai-campaign` on the missing clusters. Social: `marketing-seo-campaign` on the gap-matrix social routes.
+   - **Phase 3 (weeks 9–12): Compound + measure.** SEO: refreshes on what moved; backlink outreach starter (`seo-backlink-gap` from the seo-skills plugin, if installed). AI: extend winning clusters. Social: double down per `marketing-content-patterns`. Gate: `marketing-campaign-impact` verdicts on every `mkt:*` campaign + `marketing-report` for the quarter.
    - **Measurement gates:** each phase ends with `marketing-report` (period view) and, from Phase 2 on, `marketing-campaign-impact` on the phase's campaigns. A phase whose campaigns read "rework" changes the next phase's scope — write that rule into the plan.
    - For longer horizons (180/365 days), repeat phases 2+3 with refreshed inputs and a quarterly retro.
    - Each work item is tagged with the skill that produces it.
@@ -86,7 +86,7 @@ This is the "what should we work on next quarter" skill. It does not replace spe
    - One leading + one lagging per phase. Tie each metric to a current value (from step 2) and a phase-end target. Targets must be defensible — call out base rates.
 
 9. **Sequencing + dependencies**
-   - Build a dependency map: e.g., "rewrite cluster A pillar" depends on "fix `noindex` on /blog templates" depends on "run `seo-technical-audit`."
+   - Build a dependency map: e.g., "rewrite cluster A pillar" depends on "fix `noindex` on /blog templates" depends on "run a site audit."
    - Surface the critical path. Anything off the critical path is moveable; anything on it blocks the phase.
 
 10. **Synthesise** `PLAN.md`
@@ -140,7 +140,7 @@ Top-level: `PLAN.md` + the three phase files (`04`/`05`/`06`). Owners share sing
 
 | # | Track | Work item | Skill / source | Owner | Effort | Phase-end metric |
 |---|---|---|---|---|---|---|
-| 1.1 | SEO | {item} | seo-skills `seo-technical-audit` follow-up | {role} | {S/M/L} | {metric} |
+| 1.1 | SEO | {item} | site-audit follow-up | {role} | {S/M/L} | {metric} |
 | 1.2 | AI | {item} | `marketing-ai-visibility-benchmark` | {role} | {S/M/L} | {metric} |
 | 1.3 | Social | {item} | `marketing-post-batch` | {role} | {S/M/L} | {metric} |
 
@@ -189,5 +189,5 @@ Run Phase 1 work items. After week 4, run `marketing-report` for the phase windo
 
 ## Works well with
 
-- **Predecessors (produce inputs):** `marketing-gap-matrix`, `marketing-ai-visibility-benchmark`, `marketing-content-patterns`, `marketing-local-audit`; seo-skills' `seo-technical-audit` / `seo-content-audit` / `seo-backlinks-profile` when deeper single-channel data exists.
+- **Predecessors (produce inputs):** `marketing-gap-matrix`, `marketing-ai-visibility-benchmark`, `marketing-content-patterns`, `marketing-local-audit`; `seo-technical-audit` (seo-skills plugin, if installed) / `seo-content-audit` / `seo-backlinks-profile` when deeper single-channel data exists.
 - **Successors (execute the plan):** `marketing-content-brief` (Phase 2 articles + distribution), `marketing-seo-campaign` / `marketing-ai-campaign` (campaign tracks), `marketing-comparison-page`, `marketing-post-batch`, `marketing-weekly-ops` (weekly heartbeat), `marketing-campaign-impact` + `marketing-report` (phase gates).
