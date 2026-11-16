@@ -43,7 +43,7 @@ Verify both MCPs before starting: `DATA_getSubscription` (SE Ranking) and `list_
    - This is both the exclusion set and the **site-coverage evidence**: a gap keyword where the target ranks nowhere at all is "site: not covered"; position 21–50 is "site: weak" (a page exists but loses).
 
 4. **Compute the gap** `DATA_getDomainKeywordsComparison` (cross-check)
-   - Keywords ranked by at least one competitor in the top 20 but not ranked by the target domain at all.
+   - Keywords ranked by at least one competitor in the top 20 where the target is absent or outside the top 20. Keep the target's own position from step 3 next to each one — it is what separates "not covered" from "weak".
    - Use the comparison endpoint as a cross-check.
 
 5. **Filter and segment**
@@ -91,7 +91,7 @@ Market: {country} · Competitors: {list} · Social history window: {dates}
 |---|---|---|---|---|---|---|---|---|
 | 1 | {kw} | {n} | {n} | 4 of 5 | not covered | not covered | **both** | {one line} |
 | 2 | {kw} | {n} | {n} | 3 of 5 | weak (#34) | covered | **site** | {one line} |
-| 3 | {kw} | {n} | {n} | 2 of 5 | covered (#8) | not covered | **social** | {one line} |
+| 3 | {kw} | {n} | {n} | 2 of 5 | weak (#27) | not covered | **social** | {one line} |
 
 ## Routed backlogs
 ### → Site ({n} themes) — hand to a content brief
@@ -101,7 +101,7 @@ Market: {country} · Competitors: {list} · Social history window: {dates}
 
 ## Recommended next steps
 1. Launch `marketing-seo-campaign` on the social/both routes (it will label and baseline the campaign).
-2. Brief the site routes (seo-skills `seo-content-brief`, or marketing-content-brief for brief + distribution in one).
+2. Brief the site routes (`marketing-content-brief` — brief + distribution in one).
 3. Re-run this matrix quarterly; compare coverage columns to see gaps actually closing.
 ```
 

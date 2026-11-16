@@ -58,6 +58,6 @@ See:
 
 ## Recommended next step
 
-- If PUBLISH: ship; capture a `seo-drift` baseline so you can track post-publish performance.
+- If PUBLISH: ship; record today's rankings and traffic as the baseline so post-publish performance can be tracked.
 - If PUBLISH WITH FIXES: hand the top-5 fix list to the writer; re-audit after fixes.
 - If NO PUBLISH: rework the piece against the failing dimensions; re-audit before re-considering publication.

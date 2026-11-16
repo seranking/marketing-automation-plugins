@@ -1,6 +1,6 @@
 # Local citation sources by vertical
 
-Reference list for step 9 of `seo-local` (citation-presence sample via WebSearch). Use this to pick the 8 directories to sample for the detected vertical: 6 Tier-1 universal + 2 vertical-specific.
+Reference list for the citation step of `marketing-local-audit` (citation-presence sample via WebSearch). Use this to pick the 8 directories to sample for the detected vertical: 6 Tier-1 universal + 2 vertical-specific.
 
 The list is curated to directories that meaningfully drive local-pack visibility, GBP verification trust, or AI-search source coverage (ChatGPT pulls from Yelp / TripAdvisor / BBB / Reddit; Bing Places powers ChatGPT, Copilot, Alexa). Long-tail directories below the surface here have low-to-zero ranking impact and contribute to the diminishing-returns curve.
 

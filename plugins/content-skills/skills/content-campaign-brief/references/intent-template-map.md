@@ -10,7 +10,7 @@ Use this map at brief time to classify the article being briefed against one of 
 2. Classify each top-10 URL by page type from its title, URL shape, and layout (the `seo-sxo` skill in `seranking/seo-skills` has a detailed page-type pattern reference if that plugin is installed).
 3. Take the dominant type (≥ 6 of 10) → that's your template. If split (e.g. 4-4-2), see the MIXED rule in `SKILL.md` Tips.
 4. Sanity-check against the keyword's intent classification (informational broad / informational how / commercial compare / etc.).
-5. Record the chosen template + a one-sentence justification in `BRIEF.md`'s "Template type" + "Why this template" lines.
+5. Record the chosen template + a one-sentence justification in `CAMPAIGN-BRIEF.md`'s "Template type" + "Why this template" lines.
 
 ---
 

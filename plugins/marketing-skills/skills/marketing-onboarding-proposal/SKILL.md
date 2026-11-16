@@ -44,8 +44,8 @@ Confirm the client domain, competitors, the Planable workspace, and what the eng
 ### 2. SEO + AI-search analysis (SE Ranking)
 - **Organic footprint:** `DATA_getDomainOverviewWorldwide` + `DATA_getDomainKeywords` — traffic, top terms, trajectory. Highlight **striking-distance** terms (high volume, position 11–30) — they're the fastest wins.
 - **Competitive gaps:** `DATA_getDomainCompetitors` + `DATA_getDomainKeywordsComparison` — what competitors capture that the client doesn't (discard junk/off-brand terms).
-- **Site health:** reuse an existing audit (`PROJECT_listAudits` → `getAuditReport`) or run `DATA_createStandardAudit` → `DATA_getAuditReport` — health score and the issues holding pages back.
-- **AI visibility:** `DATA_getAiSearchBrand` to resolve the brand, then `DATA_getAiSearchOverview` and `DATA_getAiSearchLeaderboard` vs competitors (query the leaderboard narrowly — see the ai-search skill's timeout note).
+- **Site health:** reuse an existing audit (`PROJECT_listAudits` → `getAuditReport`) or, with the user's go-ahead (a crawl consumes audit budget — state the page cap first), run `DATA_createStandardAudit` → `DATA_getAuditReport` — health score and the issues holding pages back.
+- **AI visibility:** `DATA_getAiSearchBrand` to resolve the brand, then `DATA_getAiSearchOverview` and `DATA_getAiSearchLeaderboard` vs competitors (query the leaderboard narrowly — one engine or ≤3 competitors per call, retry once on a timeout).
 - **Demand for content:** `DATA_getKeywordQuestions` + `DATA_getRelatedKeywords` — proof there's an audience to win.
 - Separate findings into **quick wins** (low effort, near-term) and **strategic plays** (higher effort, compounding).
 
@@ -63,14 +63,14 @@ Structure it as: **Where you are** (SEO health + AI visibility + social baseline
 ### 5. Instrument the baseline (signature step — with the user's go-ahead)
 The proposal's numbers become worthless the day nobody can re-check them. With confirmation:
 
-- **Label:** create `mkt:onboarding-<client-slug>` in the client's workspace — future campaign skills attach to it and reports can isolate the engagement's output from day one.
-- **Campaign passport:** one post on a Universal content page titled `Campaign passport: mkt:onboarding-<client>` (file fallback if none) holding the baseline verbatim: organic traffic/keywords, striking-distance terms, AI presence/SoV vs competitors, social cadence/engagement, audit health score, snapshot date. This is the "where you were when we started" record `marketing-campaign-impact` and `marketing-report` measure against.
-- **Optional deeper tracking** (consumes plan limits — confirm explicitly): reuse/create an SE Ranking project, `PROJECT_addKeywords` for the agreed target terms, `PROJECT_addCompetitor` for the named competitors.
+- **Label:** create `mkt:onboarding-<client-slug>` in the client's workspace — reports can isolate the engagement's output from day one.
+- **Campaign passport:** one post on a Universal content page titled `Campaign passport: mkt:onboarding-<client-slug>` (if there is no Universal page, save `campaign-passport-onboarding-<client-slug>.md` in the working folder and tell the user where it is — the measuring skills look for that exact filename when there is no Universal page) holding the engagement goal, the start date, and the baseline verbatim: organic traffic/keywords, striking-distance terms, AI presence/SoV vs competitors, social cadence/engagement, audit health score, snapshot date. This is the "where you were when we started" record `marketing-campaign-impact` and `marketing-report` measure against.
+- **Optional deeper tracking** (consumes plan limits — confirm explicitly): reuse/create an SE Ranking project, `PROJECT_addKeywords` for the agreed target terms (show the list and count first; keep it to the agreed terms, at most 100 per call), `PROJECT_addCompetitor` for the named competitors. Record the `site_id` in the passport.
 
 If the user declines, produce the document anyway — but note in the measurement-plan section that the baseline exists only inside the proposal text.
 
 ### 6. Produce the document
-Default to a clean `proposal.md` in the outputs folder. If the user wants a presentation-ready deliverable, build it with the `docx` skill (formal document) or `pptx` skill (pitch deck) — read that skill, then format the synthesised content into it.
+Default to a clean `proposal.md` in the working folder. If the user wants a presentation-ready deliverable and a document or slide-deck skill is available in the session, use it to format the synthesised content; otherwise deliver the markdown.
 
 ## Output
 

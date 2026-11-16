@@ -81,7 +81,7 @@ A SERP usually has 1–2 dominant patterns. Heuristic:
 ## Edge cases
 
 - **Brand-name SERPs:** the top result is the brand's homepage; rest is press/reviews. Page type for the user's brand: Product/SaaS landing.
-- **Local SERPs (with map pack):** treat as a separate pattern — `seo-local-rank-tracking` (planned future skill) is the better diagnostic.
+- **Local SERPs (with map pack):** treat as a separate pattern — `marketing-local-audit` is the better diagnostic.
 - **News-fresh SERPs:** dominated by editorial/news with date-stamps in titles; treat as Editorial; freshness is the dominant signal.
 
 ## Outputs the SXO skill produces from this

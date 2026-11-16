@@ -43,19 +43,20 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
    - From the gaps, select one topic. Justify the pick with: traffic potential, difficulty, relevance to the target domain's product. Surface reasoning to the user before proceeding.
 
 5. **SERP and keyword deep-dive for the chosen topic**
-   - `DATA_getSerpResults` for the top 10 organic + SERP features (AIO, PAA, Featured Snippet, Video).
+   - `DATA_getSerpResults(query[], language_code, country_code, result_type: advanced)` for the top 10 organic + SERP features (AIO, PAA, Featured Snippet, Video). `language_code` is required, and advanced (≈10 credits per query) is the only result type that returns AIO/PAA/video — standard returns organic, ads and featured-snippet items and only names the other features in its summary.
+     - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
    - `DATA_getRelatedKeywords` and `DATA_getSimilarKeywords` for expansion.
    - `DATA_getKeywordQuestions` for People-Also-Ask and question-based variations.
-   - `DATA_getAiSearchOverview` + `DATA_getAiSearchLeaderboard` to see which brands LLMs cite today for the topic.
+   - Read the AI Overview item in that advanced SERP result to see which sources are cited for this query today. For the domain's wider AI footprint, `DATA_getAiSearchPromptsByTarget(target, engine, source)` lists prompts where it is cited. `DATA_getAiSearchOverview` / `DATA_getAiSearchLeaderboard` are domain-level totals and take no keyword or topic.
 
-6. **Top 3 content analysis** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+6. **Top 3 content analysis** `WebFetch` (always) + the Firecrawl MCP's `firecrawl_scrape` (when available)
    - **WebFetch first** (free, instant): pull markdown for the top 3 ranking URLs. Extract H1/H2/H3 spine, word count per article, shared subtopics, gaps, and prose-level formatting patterns.
    - **Firecrawl second** (3 Firecrawl credits — 1 per top-3 winner) — recovers what WebFetch's markdown can't show:
      - From `metadata`: `<title>` length (the real string, not markdown's first heading), meta description length, `og:title`, `og:description`, `og:image`, `twitter:card`.
-     - From the returned `html`: every `<script type="application/ld+json">` block. Parse and list `@type`s per winner (Article, FAQPage, BreadcrumbList, Product, etc.) — these become the "schema baseline" for the new article.
+     - Request `formats: ["rawHtml"]` — the `html` format strips `<script>` and `<head>` tags, so it never contains the schema. From the returned `rawHtml` (large; usually saved to a file, so parse it there): every `<script type="application/ld+json">` block. Parse and list `@type`s per winner (Article, FAQPage, BreadcrumbList, Product, etc.) — these become the "schema baseline" for the new article.
      - On-page signals: hero-image presence, byline structure (`<a rel="author">`, `<meta name="author">`), table count, code-block count.
    - **Classify the brief's template** against the 8-template map in `references/intent-template-map.md`. Cross-reference: (a) the dominant page type across the SERP top-10 (use the heuristics in the sibling `marketing-serp-fit` skill's `references/page-type-patterns.md`), (b) PAA patterns from step 5, (c) the keyword's intent classification from `DATA_getRelatedKeywords`. Pick one of: `ultimate-guide` / `how-to` / `listicle` / `explainer` / `comparison` / `review` / `best-of` / `landing-page`. If the SERP is split across types, follow the MIXED rule (see Tips). The chosen template determines the recommended H1/H2 outline shape and word-count floor — record both the template and a one-sentence justification in `BRIEF.md`.
-   - **If Firecrawl unavailable (or `--no-firecrawl` passed):** WebFetch portion runs unchanged. The brief's "Top 3 winners — on-page benchmark" subsection (see Output) emits `(skipped — Firecrawl required for schema/og:* on competitor pages)`. Template classification still runs from WebFetch + SERP data.
+   - **If Firecrawl unavailable (or the user asked to skip it):** WebFetch portion runs unchanged. The brief's "Top 3 winners — on-page benchmark" subsection (see Output) emits `(skipped — Firecrawl required for schema/og:* on competitor pages)`. Template classification still runs from WebFetch + SERP data.
 
 7. **Internal linking plan**
    - `DATA_getDomainKeywords` filtered to the target domain plus WebFetch of 5 high-ranking pages on topically adjacent queries.
@@ -65,8 +66,8 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
 
 9. **Distribution layer (signature step)**
    - Atomize the brief into 3–5 social drafts: the strongest question keyword → a question-hook post; the TL;DR answer → a declarative post; a data point from the research → a stat post; the comparison/gap angle → a carousel or thread outline. Platform-adapt the copy (LinkedIn long-form, X punchy, etc.).
-   - Confirm the Planable workspace/pages (`list_workspaces` → `list_pages`), then create the drafts (`create_post` per platform, or `create_grouped_post` for synced copy — mind the strictest length limit when grouping).
-   - Label the batch `mkt:brief-<slug>` (`list_labels` / `create_label`) so the distribution is reportable later.
+   - Confirm the Planable workspace/pages (`list_workspaces` → `list_pages`), show the drafts and, after a go-ahead, create them (`create_post` per platform, or `create_grouped_post` for synced copy — mind the strictest length limit when grouping).
+   - Label the batch `mkt:brief-<slug>` (`list_labels` / `create_label`) so the distribution is reportable later, and offer a compact campaign passport, written on a yes — one post on a Universal content page titled `Campaign passport: mkt:brief-<slug>` (no Universal page → `campaign-passport-brief-<slug>.md` in the working folder) with goal, expected publish date, the article's target terms and the domain's current positions for them, workspace + pages. If the user declines, say that `marketing-campaign-impact` will only be able to report label-level engagement.
    - **Scheduling — ask.** Offer to spread the posts around the article's expected publish date (e.g. 1 on publish day, the rest across the following week), or leave undated. Never set `publishAtScheduledDate` — drafts only.
    - Record the batch in `BRIEF.md`'s Distribution plan section. In 2–8 weeks after the article ships, `marketing-campaign-impact` can measure the label's posts alongside the article's target terms.
 
@@ -174,7 +175,7 @@ Label: `mkt:brief-{slug}` · Posts are drafts; they publish only after approval 
 ## Tips
 
 - Respect SE Ranking Data API rate limit: 10 requests per second. Iterate sequentially, do not fan out across 20 keywords in parallel.
-- **Firecrawl cost.** Step 6's competitor benchmark adds 3 Firecrawl credits per run (1 per top-3 winner). Pass `--no-firecrawl` to skip it (the brief still ships, just without the on-page benchmark table).
+- **Firecrawl cost.** Step 6's competitor benchmark adds 3 Firecrawl credits per run (1 per top-3 winner). Skip it if the user asks (the brief still ships, just without the on-page benchmark table).
 - If the user only provides a domain and no topic, run step 3 first and present the top 3 gap opportunities before deciding.
 - Keep the brief self-contained. A freelance writer should not need to open the raw-data files unless they want to double-check something.
 - Do not hallucinate keyword difficulty or volume. If an endpoint returns null, mark the field unknown in the brief rather than guessing.

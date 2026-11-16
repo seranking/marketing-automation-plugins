@@ -16,12 +16,12 @@ content architecture rather than relying on keyword text similarity or stemming.
 For each keyword in the candidate set, retrieve the top 10 organic results via
 `DATA_getSerpResults` (SE Ranking MCP):
 
-- Pass the keyword + target country (`source` param maps to the SE Ranking SERP database, e.g. `us`, `uk`, `de`).
-- Default to **SERP-standard mode** (`result_type=standard`) — organic top-10 only, ≈ 3 credits per keyword.
-- Use **SERP-advanced mode** (`result_type=advanced` via `DATA_getSerpTaskAdvancedResults`, ≈ 10 credits per keyword) only if the cluster plan also needs SERP features (AIO presence, PAA, video carousels). For pure clustering, standard is sufficient.
-- Extract only organic result URLs (ignore ads, featured snippets, PAA, knowledge panels).
+- Pass the keyword in `query`, plus `language_code` (required) and `country_code` (e.g. `US`, `GB`, `DE`). This tool has no `source` parameter.
+- Default to **SERP-standard mode** (`result_type=standard`) — organic, ads and featured-snippet items (other features are only named in the summary), ≈ 3 credits per keyword.
+- Use **SERP-advanced mode** (`result_type=advanced` on the same `DATA_getSerpResults` call, ≈ 10 credits per keyword) only if the cluster plan also needs SERP features (AIO presence, PAA, video carousels). For pure clustering, standard is sufficient.
+- Extract only organic result URLs (ignore ads, featured snippets, PAA, knowledge panels). The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number. Dedupe the URLs: the same URL can appear twice in one top 10, so a set can hold fewer than 10.
 - Normalize URLs: strip protocol, trailing slash, and query parameters (except meaningful ones like `?id=` for product pages).
-- Store as a set of 10 URLs per keyword.
+- Store as a set of (up to) 10 URLs per keyword.
 
 ### Step 2: Pairwise Comparison
 
@@ -101,7 +101,7 @@ Diagonal is always 10 (a keyword overlaps perfectly with itself).
 4. **Never ignore SERP feature differences.** If keyword A triggers a local pack and
    keyword B triggers a featured snippet, they likely need different content types
    even with moderate URL overlap. (SERP-advanced mode is required to see this — the
-   standard `DATA_getSerpResults` call returns organic only.)
+   standard `DATA_getSerpResults` call returns organic, ads and featured-snippet items; other features are only named in its summary.)
 5. **Never treat all domains equally.** Wikipedia and Reddit appear in many SERPs.
    Consider filtering out ubiquitous domains (top 5 most common) before scoring, or
    weighting domain-specific results higher.
@@ -109,11 +109,11 @@ Diagonal is always 10 (a keyword overlaps perfectly with itself).
 ## Data Source Priority
 
 1. **`DATA_getSerpResults` (standard mode, default)** — organic top-10 only, ≈ 3 credits
-   per keyword. Sufficient for clustering. Pass the target country as `source`.
-2. **`DATA_getSerpTaskAdvancedResults` (advanced mode)** — organic + SERP features,
+   per keyword. Sufficient for clustering. Pass `language_code` (required) and `country_code`.
+2. **`DATA_getSerpResults` with `result_type=advanced`** — organic + SERP features,
    ≈ 10 credits per keyword. Use only if the cluster plan downstream wants AIO/PAA
    data per keyword (e.g. you intend to also feed the keyword set into the `seo-geo` or
-   `seo-sxo` skills from `seranking/seo-skills`). Otherwise the extra cost is wasted on a clustering pass.
+   `seo-sxo` skills from `seranking/seo-skills`, if installed). Otherwise the extra cost is wasted on a clustering pass.
 
 ## Caching
 

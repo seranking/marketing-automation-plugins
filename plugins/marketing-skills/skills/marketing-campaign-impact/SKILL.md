@@ -36,8 +36,9 @@ Verify both MCPs before starting: `DATA_getSubscription` (SE Ranking) and `list_
 
 ### 2. Read each campaign's passport
 - Look for the passport post: `list_pages(workspaceId)` → pages with `type: "universal"` → `list_posts` on them → the post titled `Campaign passport: mkt:<slug>`.
-- Parse from it: goal, launch date, source clusters/keywords/prompts, baseline numbers (positions, AI presence/SoV, engagement), tracked terms/prompts, tracker engine id if one was created.
-- No passport → note it, and fall back to label-only measurement (Edge cases).
+- Parse from it: goal, launch date, source clusters/keywords/prompts, baseline numbers (positions, AI presence/SoV, engagement), tracked terms/prompts, the SE Ranking `site_id` and any `site_engine_id`s (local campaigns record one per city), tracker engine id if one was created, and for refresh campaigns the page URLs with the issues each fix targeted. Passports differ by campaign type — a field that isn't there is "not recorded", not zero.
+- No passport post in this workspace → check the fallback before giving up: a `campaign-passport-<slug>.md` file in the working folder (written when the workspace had no Universal page), or — because labels are per-workspace — a passport post in another workspace the user names. Ask the user where it is rather than assuming there is none.
+- Still none → note it, and fall back to label-only measurement (Edge cases).
 
 ### 3. Pull the campaign's social performance (Planable)
 - `list_posts(workspaceId, ...)` filtered by the campaign label → the campaign's posts and their publish states (how many actually went live vs stayed drafts — a campaign that never shipped can't have moved anything; say so).
@@ -45,8 +46,9 @@ Verify both MCPs before starting: `DATA_getSubscription` (SE Ranking) and `list_
 
 ### 4. Re-pull the search/AI side (SE Ranking)
 Mirror whatever the baseline recorded — compare like with like:
-- **Tracked terms:** with a project — `PROJECT_getPositionHistory(site_id, date_from=launch, date_to=today)` for the campaign's terms; without — `DATA_getDomainKeywords` filtered to those terms and compare current position vs baseline.
+- **Tracked terms:** with a project — `PROJECT_getPositionHistory(site_id, date_from=launch, date_to=today)` for the campaign's terms (local campaigns: once per city `site_engine_id`, for a per-city verdict); with no `site_id` in the passport, or without a project — `DATA_getDomainKeywords` filtered to those terms and compare current position vs baseline.
 - **AI visibility campaigns:** `DATA_getAiSearchOverview(target, source, brand?)` — brand presence / link presence now vs passport baseline; `DATA_getAiSearchLeaderboard` narrowly (few engines/competitors per call — it can 504) for SoV movement; `DATA_getAiSearchPromptsByBrand` / `ByTarget` to check whether the brand now appears for the campaign's target prompts (count entered vs still missing).
+- **Refresh campaigns (`mkt:refresh-*`):** check the passport's issue list against the most recent finished audit (`PROJECT_listAudits` / `DATA_listAudits` → the report, `DATA_getIssuesByUrl` for the refreshed URLs) and report each issue as cleared / still present. If the latest audit predates the fixes, say so and ask before starting a new crawl — it consumes audit budget.
 - **Tracker engine recorded in the passport:** `PROJECT_getPromptsRankings` + `PROJECT_getLlmStatistics` give the cleanest prompt-level movement.
 - Sequential calls, ~10 req/s; never invent a number — a metric that can't be re-pulled is reported as "not measurable now", not estimated.
 
@@ -62,7 +64,7 @@ Weigh the evidence against the time elapsed (AI visibility and rankings move in 
 The verdict must cite numbers: baseline → current for each tracked metric. If `previous`/baseline is missing for a metric, present current as a new baseline — never as growth.
 
 ### 6. Recommend the next move
-- **working** → double down: extend the winning clusters (`marketing-seo-campaign` / `marketing-ai-campaign` round 2), and update the passport with the new baseline.
+- **working** → double down: extend the winning clusters (`marketing-seo-campaign` / `marketing-ai-campaign` round 2), and offer to update the passport with the new baseline (it is a post in the user's workspace — edit it only on a yes).
 - **not yet** → set the re-check date; optionally add tracking that was skipped at launch.
 - **rework** → name the weakest link with evidence (e.g. "posts earned reach but the brand still isn't cited — the gap is citable web content, not social volume") and route: content refresh (`marketing-content-refresh`), different angles, or channel mix.
 
@@ -96,7 +98,7 @@ Multiple campaigns → one section per campaign plus a one-line scoreboard at th
 - Time honesty beats optimism: an AI-visibility verdict at week 1 is noise — say "not yet" and give the date.
 - Drafts that never shipped are the most common "campaign failure" — check publish states before blaming the content.
 - Social engagement is the fastest signal and the least connected to the goal; treat it as supporting evidence, not the verdict.
-- When a campaign is judged "working", refresh the passport baseline so the next measurement window starts clean.
+- When a campaign is judged "working", offer to refresh the passport baseline so the next measurement window starts clean.
 
 ## Edge cases & limits
 

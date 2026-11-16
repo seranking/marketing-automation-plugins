@@ -43,7 +43,8 @@ Map the paid-search landscape around a brand's target keywords — then the move
    - For the keyword(s) in scope, pull related questions.
    - Identifies question-phrased intent variants worth bidding on (often cheaper, higher conversion).
 
-5. **SERP ad/shopping presence** `DATA_getSerpResults`
+5. **SERP ad/shopping presence** `DATA_getSerpResults(query[], language_code, country_code, result_type: advanced)` — `language_code` is required; advanced (≈10 credits per query) is needed for shopping, image and local packs, since standard returns only organic, ads and featured-snippet items (other features are named in its summary but not returned)
+   - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
    - For top 5 keywords (domain mode) or the target keyword (keyword mode):
      - Use SERP-feature filters to detect ad-pack composition: `tads` (top ads above organic), `bads` (bottom ads below organic), `sads` (shopping ads / Google Shopping pack), `mads` (mobile/map-pack ads).
      - Top SERP ad slots (positions 1-4 above organic, 1-3 below).
@@ -157,7 +158,7 @@ See `recommended-keywords.csv`. Top 10:
 | {kw / claim} | {domains, ~${cpc}} | silent | post series | "{hook adapted from their ad copy}" |
 
 ## Recommended next step
-Launch `marketing-seo-campaign` on the counterplay rows (labeled + measurable); route comparison-intent rows to `marketing-comparison-page`. For deeper keyword architecture, seo-skills' `seo-keyword-cluster` / `seo-keyword-niche` pair well with the shortlist.
+Launch `marketing-seo-campaign` on the counterplay rows (labeled + measurable); route comparison-intent rows to `marketing-comparison-page`. For deeper keyword architecture, `seo-keyword-cluster` (seo-skills plugin, if installed) / `seo-keyword-niche` pair well with the shortlist.
 ```
 
 `recommended-keywords.csv` columns: `keyword,volume,cpc_estimate,position_target,intent,competitor_count,why_recommended`
@@ -169,7 +170,7 @@ Launch `marketing-seo-campaign` on the counterplay rows (labeled + measurable); 
 - **CPC estimates lag.** SE Ranking's CPC data is not real-time auction data; treat as ±30% directional.
 - Ad copy often reveals competitor positioning before product launches do — periodic review (quarterly) catches strategic shifts.
 - Question-intent variants often have lower CPC and higher conversion than head terms. The shortlist in step 8 prioritises these.
-- Pair with seo-skills' `seo-keyword-niche` for organic content opportunities derived from paid keyword research.
+- Pair with `seo-keyword-niche` (seo-skills plugin, if installed) for organic content opportunities derived from paid keyword research.
 - Pair with `marketing-comparison-page` if the bidding landscape reveals "X vs Y" / "alternatives" intent — those keywords convert best as comparison pages, not paid ads.
 - **Ads data via shared DATA_* tools** — beyond the dedicated `DATA_getDomainAdsByDomain` / `DATA_getDomainAdsByKeyword`, the `type: 'adv'` enum switch on `DATA_getDomainKeywords`, `DATA_getDomainKeywordsComparison`, `DATA_getDomainCompetitors`, `DATA_getDomainPages`, and similar tools surfaces the paid view of the same data structures. Combine with the `tads/bads/sads/mads` SERP-feature filters and the CPC filter on SERP queries to map paid landscape comprehensively.
 - Don't recommend paid keywords without context. The shortlist is a starting point for the PPC team, not an autopilot.

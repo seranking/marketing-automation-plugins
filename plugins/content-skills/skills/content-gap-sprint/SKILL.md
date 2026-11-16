@@ -5,7 +5,7 @@ description: Turn SE Ranking gap research into a full content sprint, not just p
 
 # Content Gap Sprint
 
-Connect SE Ranking (where the demand and the gaps live) to Planable (where content gets made, approved, and published). The goal is a focused social campaign whose every post is grounded in real search demand — not a generic brainstorm.
+Connect SE Ranking (where the demand and the gaps live) to Planable (where content gets made, approved, and published). The goal is a content sprint — a focused social campaign plus light article briefs for the top gaps — where every piece is grounded in real search demand, not a generic brainstorm.
 
 ## Prerequisites
 
@@ -36,7 +36,8 @@ Work sequentially (respect the Data API limit of ~10 requests/second). Save raw 
 - `DATA_getDomainCompetitors` — confirm the real organic competitors (sort by shared keywords; take the top 3–5). Note: this call returns the full set and may be written to a file — read and parse it.
 - `DATA_getDomainKeywordsComparison` — the core gap list: keywords competitors rank for that the target does not. Filter to keep it useful (e.g. informational/commercial intent, volume > a sensible floor, difficulty the domain can realistically win). **Then judge relevance, not just the numbers** — competitor gap lists are noisy and surface off-brand junk (glossary entries, follower-farming terms like "free followers", unrelated blog tangents). Discard anything that isn't a topic the target could credibly post about; a high-volume term the brand has no business addressing is not an opportunity. If a strict filter returns almost nothing, loosen one threshold or try another competitor rather than forcing a campaign out of junk.
 - `DATA_getRelatedKeywords` + `DATA_getKeywordQuestions` — expansion terms and real questions people ask. **Question keywords are gold for social hooks** — they map directly to post openers. These endpoints often return only a handful of rows per seed, so query **several seeds (3–5 core topics) and aggregate** rather than trusting one; a seed returning 1–2 questions is normal, not a sign there's no demand.
-- `DATA_getSerpResults` for the 2–4 strongest themes — read the intent and the SERP features so the social angle matches what searchers actually want.
+- `DATA_getSerpResults` for the 2–4 strongest themes — read the intent and the SERP features so the social angle matches what searchers actually want. Pass `language_code` (required) plus `country_code`. Standard results return organic, ads and featured-snippet items (the summary names any other features present, without their content); add `result_type: advanced` (≈10 credits per query) when AI Overview / PAA / pack presence matters.
+  - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
 - **Ranking losses (if a project exists):** call `PROJECT_getPositionHistory` (type `avg_pos` or `visibility`) to find terms that slipped. A recovering or slipping keyword is a strong "we have something to say" social trigger. If there is no project, skip this and rely on the gap analysis above.
 
 ### 3. Cluster into themes, then into angles
@@ -66,7 +67,7 @@ Show all drafts in a preview before creating anything, unless the user said "jus
 - If the user wants the batch tagged, call `list_labels` (or `create_label`) and pass the label UUIDs. A campaign label (e.g. "SEO-driven") makes later reporting easy.
 
 ### 6. Confirm and hand off
-Report how many drafts were created, in which workspace/pages, the proposed schedule, and any `validationErrors` (e.g. Instagram needs media — flag it). Offer to set up rank/AI tracking for the targeted terms, or to report on the campaign later (the `seo-ai-social-report` skill from seranking/seo-skills).
+Report how many drafts were created, in which workspace/pages, the proposed schedule, and any `validationErrors` (e.g. Instagram needs media — flag it). Offer to set up rank/AI tracking for the targeted terms, or to report on the campaign later (the `seo-ai-social-report` skill from seranking/seo-skills, if installed).
 
 ## Content pointers: writing for keywords & AI visibility gaps
 
@@ -99,7 +100,7 @@ Keep these in mind when creating social content meant to target a specific keywo
 - **Ranking-loss detection needs an SE Ranking project** with position history. Without one, the campaign is built from competitor gap analysis (still strong, just not loss-driven).
 - **No SE Ranking Content Editor via MCP.** This skill drafts the social copy directly; it does not produce a Content-Editor optimization score. If the user needs website/blog copy scored, that step stays in the SE Ranking UI.
 - **Instagram/visual platforms require media.** Text-only drafts will flag a validation error; offer to attach a public image URL via `mediaUrls`, or note that media must be added in Planable before publishing.
-- This skill creates social drafts only — publishing happens in Planable after approval.
+- In Planable this skill creates drafts only — publishing happens there after approval. The article briefs are files, not published content.
 
 ---
 
@@ -117,4 +118,4 @@ Social posts intercept demand this week; articles capture it durably. A gap wort
 
 ## Final output (extends the social campaign)
 
-**GAP-SPRINT.md**: the campaign summary from Phase 1 (posts live in Planable as drafts), then per-gap article briefs, then the sprint timeline. Each brief is ready for `content-campaign-brief` to deepen into a full campaign brief if the user wants.
+**GAP-SPRINT.md**: the campaign summary from the main process above (posts live in Planable as drafts), then per-gap article briefs, then the sprint timeline. Each brief is ready for `content-campaign-brief` to deepen into a full campaign brief if the user wants.

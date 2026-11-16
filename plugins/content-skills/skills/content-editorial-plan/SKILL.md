@@ -3,7 +3,7 @@ name: content-editorial-plan
 description: Build a quarter-ready editorial plan from seed keywords — intent-grouped clusters with pillar+spoke architecture, then map every spoke onto a 12-week publication calendar with cadence, priorities, a brief queue, and per-month social themes pulled from Planable engagement data when connected. Use whenever the user wants a content plan they can actually execute — "editorial plan", "quarterly content plan", "content calendar from keywords", "plan our next quarter of content", "what should we publish and when". Requires the SE Ranking MCP; the Planable MCP is optional for social themes. For keyword-cluster architecture alone without a calendar, use seo-keyword-cluster from seranking/seo-skills instead.
 ---
 
-> Example output: [examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md) (hosted in the seranking/seo-skills repo)
+> Example of the cluster-architecture part (from the seo-skills counterpart of this skill; this skill's own deliverable adds the Phase 2 sections and uses its own filename): [examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md](https://github.com/seranking/seo-skills/blob/main/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md) (hosted in the seranking/seo-skills repo)
 
 # Content Editorial Plan
 
@@ -29,7 +29,8 @@ Transform seed keywords into a prioritised cluster plan: each cluster grouped by
    - Strip branded terms the target does not own.
    - Tag each keyword with detected intent: informational, commercial, transactional, navigational.
 
-4. **Cluster by SERP overlap** `DATA_getSerpResults` (or `DATA_getSerpTaskAdvancedResults`)
+4. **Cluster by SERP overlap** `DATA_getSerpResults(query[], language_code, country_code)`
+   - The response is large (about 70 KB, roughly 100 organic results rather than 10) and is usually saved to a file instead of shown inline. Extract only what this step needs with a short script — organic items with `rank_group` 1–10, plus any feature item you need such as `ai_overview` — rather than loading the whole result. Organic rank is in `rank_group`; `position` is a label such as `center`, not a number.
    - Group keywords by how Google actually ranks them — shared top-10 organic URLs — not by text similarity. Token-overlap clustering manufactures cannibalisation; see `references/serp-overlap-methodology.md` for the full algorithm and anti-pattern callouts.
    - **Budget guard before running.** Compute `estimated_credits = num_candidate_keywords × per_keyword_cost` where `per_keyword_cost = 3` (SERP-standard, default) or `10` (SERP-advanced, only if downstream needs AIO/PAA). Standard is sufficient for clustering. If `estimated_credits > 500`, surface the figure to the user and offer two paths: (a) proceed with SERP-standard, (b) trim the candidate set by raising the min-volume / lowering the max-KD thresholds in step 3 and re-running. If the user already requested SERP-advanced and the estimate exceeds 500, additionally offer SERP-standard as a cheaper fallback.
    - **Fetch SERPs** (one call per unique candidate keyword, cached for the session) — see `references/serp-overlap-methodology.md` § "Caching". Total SERP fetches = number of keywords, not number of pairs.
@@ -48,7 +49,7 @@ Transform seed keywords into a prioritised cluster plan: each cluster grouped by
    - Output a prioritised build order.
 
 7. **Quality scorecard** (post-synthesis validation)
-   - After `EDITORIAL-PLAN.md` is written, run a 4-metric quality scorecard against the produced plan and warn the user if any metric fails. Inspired by theirs' post-execution scorecard model — adapted to our cluster-plan output (we score the *plan*, not generated content, since the cluster phase stops at the architecture).
+   - After `EDITORIAL-PLAN.md` is written, run a 4-metric quality scorecard against the produced plan and warn the user if any metric fails. The scorecard checks the plan itself (we score the *plan*, not generated content, since the cluster phase stops at the architecture).
    - **Cannibalisation (zero tolerance).** No two clusters in the plan should share ≥ 40% SERP overlap with each other (computed from the cached SERP matrix in step 4). If two clusters trip this gate, re-merge them and re-run from step 5 onward.
    - **Orphan (zero tolerance).** Every spoke article in the plan must be linked from its pillar in the internal-link map produced in step 5. Any spoke without an inbound link from its pillar is an orphan.
    - **Coverage.** The pillar page in each cluster must cover ≥ 70% of the cluster's high-volume keywords (top half of the cluster by volume) in its primary keyword + secondary keyword set, or via the H2s drafted in step 5. Below 70% means the pillar is too narrow for the cluster it heads.
@@ -156,4 +157,4 @@ A cluster diagram doesn't ship content — a calendar with cadence and next acti
 
 ## Final output (replaces the standalone cluster plan)
 
-**EDITORIAL-PLAN.md**: the Phase 1 cluster architecture, then a Quarter calendar table (12 weeks), then the Brief queue, then monthly social themes.
+**EDITORIAL-PLAN.md**: the cluster architecture from the main process above, then a Quarter calendar table (12 weeks), then the Brief queue, then monthly social themes.

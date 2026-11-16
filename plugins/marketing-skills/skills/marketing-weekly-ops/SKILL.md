@@ -43,8 +43,8 @@ Keep every section shallow — this is a briefing, not four audits. Sequential S
 - Output: the week grid in one compact block + up to 3 "uncovered demand" lines with figures.
 
 ### 3. Campaign status — every `mkt:*` label
-- `list_labels(workspaceId)` → labels matching `mkt:*`. For each: `list_posts` filtered by the label → publish states (drafts stuck vs live), and read the campaign passport on the Universal page when one exists.
-- For campaigns with tracked terms in the passport and ≥2 weeks of age: one shallow check (`DATA_getDomainKeywords` filtered to those terms, or `PROJECT_getPositionHistory` when a project id is recorded) — direction only, not a full measurement.
+- `list_labels(workspaceId)` → labels matching `mkt:*`. For each: `list_posts` filtered by the label → publish states (drafts stuck vs live), and read the campaign passport — the `Campaign passport: mkt:<slug>` post on a Universal page, or `campaign-passport-<slug>.md` in the working folder when the workspace has none.
+- For campaigns with tracked terms in the passport and ≥2 weeks of age: one shallow check (`DATA_getDomainKeywords` filtered to those terms, or `PROJECT_getPositionHistory` when the passport records a `site_id`) — direction only, not a full measurement.
 - Verdict per campaign, one line each: **launching** (drafts pending — point at the P1 approvals) / **live** (posts out, too early to judge) / **moving** (tracked terms drifting up) / **stalled** (live 4+ weeks, nothing moving → queue `marketing-campaign-impact` for the real verdict).
 
 ### 4. The briefing — one prioritized action list

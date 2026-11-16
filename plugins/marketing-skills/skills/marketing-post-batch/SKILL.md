@@ -150,7 +150,7 @@ After all posts are created, report back:
 ## Edge cases
 
 - **Media**: This skill creates text-only drafts by default. If the user provides a public image URL, pass it as `mediaUrl`. If they reference a file from their computer, explain that Planable requires a public URL and suggest uploading to Google Drive or similar first.
-- **Update coming**: Post editing is not yet available via the connector. If the user asks to revise an existing post, note this and suggest editing directly in Planable.
+- **Revising an existing post**: this skill only creates drafts. If the user asks to revise a post that already exists, confirm which one and what should change before touching it, or suggest editing directly in Planable.
 - **Stories / Reels**: Supported via `classification` parameter. Ask the user if they want post, story, or reels format if the platform supports multiple (Instagram, TikTok, YouTube).
 - **Rate**: Create posts one at a time (not in bulk API calls) to surface any per-post validation errors clearly.
 - **Purely internal/brand topics** (office news, culture posts): demand validation doesn't apply — mark them "brand post — demand check skipped" instead of flagging them, and write them as briefed.
